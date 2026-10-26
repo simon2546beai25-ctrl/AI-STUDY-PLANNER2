@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pricing - AI Study Planner</title>
+  <link rel="stylesheet" href="style.css">  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  
+  <style>
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.65);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .modal-box {
+      background: #ffffff;
+      padding: 26px;
+      border-radius: 14px;
+      width: 90%;
+      max-width: 420px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    }
+    .qr-container {
+      background: #faf8f5;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px dashed #d5c8be;
+      margin: 12px 0;
+    }
+    .qr-container img {
+      width: 160px;
+      height: 160px;
+      border-radius: 6px;
+    }
+    .btn-upi-app {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: #8c4a27;
+      color: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+    }
+    .utr-section {
+      background: #fdfbf8;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 10px;
+      text-align: left;
+    }
+    .utr-input {
+      width: 100%;
+      padding: 10px 12px;
+      margin-top: 6px;
+      border: 1.5px solid #d5c8be;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      background: #fff;
+    }
+    .btn-verify {
+      width: 100%;
+      background: #0ca678;
+      color: #fff;
+      border: none;
+      padding: 11px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+    .btn-verify:hover { background: #099268; }
+    .btn-close-modal {
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 0.85rem;
+      margin-top: 10px;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .success-icon {
+      font-size: 3.5rem;
+      color: #0ca678;
+      animation: bounce 0.6s ease;
+    }
+    @keyframes bounce {
+      0% { transform: scale(0.3); opacity: 0; }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="top-nav">
+    <a href="index.html" class="logo">
+      <i class='bx bx-brain'></i>
+      <span>AI Study Planner</span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="features.html">Features</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    
+    <div class="nav-right" style="display: flex; align-items: center; gap: 24px;">
+      <a href="pricing.html" class="active" style="text-decoration: none; color: #8c4a27; font-weight: 600;">Pricing</a>
+      
+      <div class="nav-auth" id="navAuthContainer">
+        <a href="login.html" class="btn-login">Login</a>
+        <a href="signup.html" class="btn-signup">Sign Up</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="section-container">
+    <div class="section-title">
+      <span class="sub-heading">PRICING</span>
+      <h2>Choose the Right Plan for You</h2>
+      <p>Upgrade to unlock the CGPA Calculator and AI Study Features</p>
+    </div>
+
+    <div class="steps-grid" style="align-items: stretch;">
+      
+      <!-- Free Plan -->
+      <div class="step-card" style="text-align: left; padding: 32px 24px;">
+        <h3 style="font-size: 1.3rem;">Free Starter</h3>
+        <p style="color: #666; margin: 6px 0 16px;">Essential tools (CGPA Calculator Locked).</p>
+        <h2 style="font-size: 2.2rem; color: #222; margin-bottom: 20px;">₹0</h2>
+        <ul style="font-size: 0.85rem; color: #555; line-height: 2; margin-bottom: 24px;">
+          <li>✔ Daily Timetable Tracker</li>
+          <li>✔ Basic To-Do List</li>
+          <li>✔ Pomodoro Focus Timer</li>
+          <li>❌ <b>CGPA Calculator (Locked)</b></li>
+        </ul>
+        <button onclick="selectFreePlan()" class="btn-secondary-hero" style="width: 100%; justify-content: center;">Use Free Plan</button>
+      </div>
+
+      <!-- Pro Student -->
+      <div class="step-card" style="text-align: left; padding: 32px 24px; border: 2px solid #8c4a27; background: #fffdfb;">
+        <span style="background: #8c4a27; color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: inline-block; margin-bottom: 8px;">MOST POPULAR</span>
+        <h3 style="font-size: 1.3rem;">Pro Student</h3>
+        <p style="color: #666; margin: 6px 0 16px;">Unlock all features including CGPA Calculator.</p>
+        <h2 style="font-size: 2.2rem; color: #8c4a27; margin-bottom: 20px;">₹99 <span style="font-size: 0.9rem; color: #777; font-weight: normal;">/ month</span></h2>
+        <ul style="font-size: 0.85rem; color: #555; line-height: 2; margin-bottom: 24px;">
+          <li>✔ <b>Full CGPA Calculator Unlocked</b></li>
+          <li>✔ AI Custom Study Routine</li>
+          <li>✔ Unlimited Exam Alerts</li>
+          <li>✔ Smart AI Summary Notes</li>
+        </ul>
+        <button onclick="openRealPayment(99, 'Pro Student')" class="btn-primary-hero" style="width: 100%; justify-content: center;">Pay ₹99 via UPI</button>
+      </div>
+
+      <!-- Semester Pass -->
+      <div class="step-card" style="text-align: left; padding: 32px 24px;">
+        <h3 style="font-size: 1.3rem;">Semester Pass</h3>
+        <p style="color: #666; margin: 6px 0 16px;">Full 6-month access for university exams.</p>
+        <h2 style="font-size: 2.2rem; color: #222; margin-bottom: 20px;">₹399 <span style="font-size: 0.9rem; color: #777; font-weight: normal;">/ semester</span></h2>
+        <ul style="font-size: 0.85rem; color: #555; line-height: 2; margin-bottom: 24px;">
+          <li>✔ <b>Full CGPA Calculator Unlocked</b></li>
+          <li>✔ Everything in Pro Student</li>
+          <li>✔ Priority AI Processing</li>
+          <li>✔ Full Exam Archive</li>
+        </ul>
+        <button onclick="openRealPayment(399, 'Semester Pass')" class="btn-secondary-hero" style="width: 100%; justify-content: center;">Pay ₹399 via UPI</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <i class='bx bx-brain'></i>
+          <span>AI Study Planner</span>
+        </div>
+        <p>Your AI-powered companion to plan smarter, study better and achieve academic excellence.</p>
+        <div class="social-links">
+          <a href="#"><i class='bx bxl-instagram'></i></a>
+          <a href="#"><i class='bx bxl-twitter'></i></a>
+          <a href="#"><i class='bx bxl-linkedin'></i></a>
+          <a href="#"><i class='bx bxl-youtube'></i></a>
+        </div>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="features.html">Features</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="how-it-works.html">How It Works</a></li>
+          <li><a href="about.html">About Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Study Tips</a></li>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="download-app-col">
+        <h4>Download App</h4>
+        <div class="app-badges">
+          <div class="app-btn"><i class='bx bxl-play-store'></i> <span>Google Play</span></div>
+          <div class="app-btn"><i class='bx bxl-apple'></i> <span>App Store</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 AI Study Planner. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Payment Modal -->
+  <div id="realPaymentModal" class="modal-overlay">
+    <div class="modal-box">
+      <h3 id="planHeading">Pay with UPI</h3>
+      <p style="color: #666; font-size: 0.8rem; margin-top: 2px;">Receiver: <b>Harshit Sharma (harshitsavarni22@okhdfcbank)</b></p>
+      
+      <div class="qr-container">
+        <img id="upiQrCode" src="" alt="Scan to Pay">
+        <p style="font-size: 0.75rem; color: #777; margin-top: 4px;">Scan with GPay, PhonePe or Paytm</p>
+      </div>
+
+      <a id="upiDeepLink" href="#" class="btn-upi-app">
+        <i class='bx bx-mobile-alt'></i> Open in UPI App (Mobile)
+      </a>
+
+      <div class="utr-section">
+        <label style="font-size: 0.8rem; font-weight: 600; color: #444;">Payment ke baad 12-digit UTR Number dalein:</label>
+        <input type="text" id="utrInput" placeholder="12-digit UTR (e.g. 423456789012)" class="utr-input" maxlength="12">
+        <button onclick="confirmPayment()" class="btn-verify">Confirm Payment & Activate</button>
+      </div>
+
+      <button onclick="closeModal()" class="btn-close-modal">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div id="successModal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="success-icon"><i class='bx bxs-check-circle'></i></div>
+      <h2 style="color: #222; margin: 8px 0;">Payment Confirmed! 🎉</h2>
+      <p style="color: #666; font-size: 0.9rem;">Pro Membership active! CGPA Calculator unlock ho gaya hai.</p>
+      
+      <div style="background: #f0fdf4; border: 1px solid #dcfce7; padding: 12px; border-radius: 8px; margin: 15px 0; font-size: 0.85rem; color: #166534;">
+        <p>Plan: <strong id="successPlan">Pro Student</strong></p>
+        <p>UTR No: <strong id="successUtr">--</strong></p>
+        <p>Features: <strong>CGPA Calculator & AI Unlocked 🔓</strong></p>
+      </div>
+
+      <button onclick="goToDashboard()" class="btn-primary-hero" style="width: 100%; justify-content: center;">Go to Dashboard &rarr;</button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    // 1. Dynamic Authentication Check
+    function renderAuthState() {
+      const user = localStorage.getItem('studyPlannerUser');
+      const authContainer = document.getElementById('navAuthContainer');
+      if (authContainer) {
+        if (user && user.trim() !== '') {
+          authContainer.innerHTML = `
+            <a href="dashboard.html" class="btn-signup" style="padding: 8px 16px;">
+              <i class='bx bx-user'></i> Dashboard (${user.split(' ')[0]})
+            </a>
+            <button onclick="logoutUser()" class="btn-login" style="color: #e03131; border-color: #ffc9c9; cursor: pointer;">
+              <i class='bx bx-log-out'></i> Logout
+            </button>
+          `;
+        } else {
+          authContainer.innerHTML = `
+            <a href="login.html" class="btn-login">Login</a>
+            <a href="signup.html" class="btn-signup">Sign Up</a>
+          `;
+        }
+      }
+    }
+
+    function logoutUser() {
+      if (confirm('Are you sure you want to logout?')) {
+        localStorage.removeItem('studyPlannerUser'); // Sirf user hata rahe hain
+        renderAuthState();
+        window.location.href = "login.html";
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', renderAuthState);
+
+    // 2. Updated Receiver UPI & Payment Logic
+    const receiverUPI = "harshitsavarni22@okhdfcbank";
+    const receiverName = "Harshit Sharma";
+    let selectedPlan = "";
+
+    function selectFreePlan() {
+      // Login Check
+      const user = localStorage.getItem('studyPlannerUser');
+      if (!user) {
+        alert("Please login first to select a plan.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      localStorage.setItem('userPlanStatus', 'free');
+      alert("✅ Free Plan Active! (Note: CGPA Calculator is locked in Free Plan)");
+      window.location.href = "dashboard.html";
+    }
+
+    function openRealPayment(amount, planName) {
+      // Login Check
+      const user = localStorage.getItem('studyPlannerUser');
+      if (!user) {
+        alert("Please login first to upgrade your plan.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      selectedPlan = planName;
+      document.getElementById('planHeading').innerText = `Pay ₹${amount} for ${planName}`;
+      
+      const upiUrl = `upi://pay?pa=${receiverUPI}&pn=${encodeURIComponent(receiverName)}&am=${amount}&cu=INR&tn=${encodeURIComponent(planName + " Subscription")}`;
+      
+      document.getElementById('upiDeepLink').href = upiUrl;
+      document.getElementById('upiQrCode').src = `https://quickchart.io/qr?text=${encodeURIComponent(upiUrl)}&size=200&margin=1`;
+      document.getElementById('utrInput').value = "";
+
+      document.getElementById('realPaymentModal').style.display = 'flex';
+    }
+
+    function confirmPayment() {
+      const utr = document.getElementById('utrInput').value.trim();
+
+      if (!utr || utr.length < 12 || isNaN(utr)) {
+        alert("⚠️ Invalid UTR Number! Please enter valid 12-digit transaction number.");
+        return;
+      }
+
+      // Pro Status Set (Main un-locking logic happening here)
+      localStorage.setItem('userPlanStatus', 'pro');
+
+      document.getElementById('realPaymentModal').style.display = 'none';
+      document.getElementById('successPlan').innerText = selectedPlan;
+      document.getElementById('successUtr').innerText = utr;
+      document.getElementById('successModal').style.display = 'flex';
+    }
+
+    function goToDashboard() {
+      window.location.href = "dashboard.html";
+    }
+
+    function closeModal() {
+      document.getElementById('realPaymentModal').style.display = 'none';
+    }
+  </script>
+
+</body>
+</html>

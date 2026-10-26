@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - AI Study Planner</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="top-nav">
+    <a href="index.html" class="logo">
+      <i class='bx bx-brain'></i>
+      <span>AI Study Planner</span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="features.html">Features</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="about.html" class="active">About Us</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav-auth" id="navAuthContainer">
+      <a href="login.html" class="btn-login">Login</a>
+      <a href="signup.html" class="btn-signup">Sign Up</a>
+    </div>
+  </header>
+
+  <section class="section-container">
+    <div class="section-title">
+      <span class="sub-heading">ABOUT US</span>
+      <h2>Built by Students, for Students</h2>
+    </div>
+
+    <div style="background: #fff; border: 1px solid #f0ede8; border-radius: 12px; padding: 40px; line-height: 1.8; color: #555; max-width: 800px; margin: 0 auto;">
+      
+      <p style="margin-bottom: 16px;">
+         We are Shivansh, Simon and Harshit a team of passionate students with a shared interest in technology, innovation, and web development. We believe in using technology to solve real-life problems and make everyday tasks easier and more efficient.
+      </p>
+      <p>
+        <br>Our project, AI Study Planner, is an initiative to make student life more organized and productive. Through this project, we aim to create a smart and user-friendly platform that helps students plan their studies, manage their tasks, and stay focused on their academic goals.</br>
+
+        <br>Working together on this project has allowed us to apply our technical knowledge, improve our problem-solving skills, and explore new ways to build useful digital solutions.</br>
+
+       <br> We are continuously learning, experimenting, and growing as developers, with a vision to turn creative ideas into meaningful technological solutions.</br>
+
+       <br> Our Vision: To learn, innovate, and build technology that makes a difference.</br>
+
+       <br> Three minds, one vision — building smarter solutions for students.</br>
+
+
+      </p>
+    </div>
+  </section>
+<!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <i class='bx bx-brain'></i>
+          <span>AI Study Planner</span>
+        </div>
+        <p>Your AI-powered companion to plan smarter, study better and achieve academic excellence.</p>
+        <div class="social-links">
+          <a href="#"><i class='bx bxl-instagram'></i></a>
+          <a href="#"><i class='bx bxl-twitter'></i></a>
+          <a href="#"><i class='bx bxl-linkedin'></i></a>
+          <a href="#"><i class='bx bxl-youtube'></i></a>
+        </div>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="features.html">Features</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="how-it-works.html">How It Works</a></li>
+          <li><a href="about.html">About Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Study Tips</a></li>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="download-app-col">
+        <h4>Download App</h4>
+        <div class="app-badges">
+          <div class="app-btn"><i class='bx bxl-play-store'></i> <span>Google Play</span></div>
+          <div class="app-btn"><i class='bx bxl-apple'></i> <span>App Store</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 AI Study Planner. All rights reserved.</p>
+    </div>
+  </footer>
+  <!-- Dynamic Authentication Script -->
+  <script>
+    function renderAuthState() {
+      const user = localStorage.getItem('studyPlannerUser');
+      const authContainer = document.getElementById('navAuthContainer');
+      if (authContainer) {
+        if (user && user.trim() !== '') {
+          authContainer.innerHTML = `
+            <a href="dashboard.html" class="btn-signup" style="padding: 8px 16px;">
+              <i class='bx bx-user'></i> Dashboard (${user.split(' ')[0]})
+            </a>
+            <button onclick="logoutUser()" class="btn-login" style="color: #e03131; border-color: #ffc9c9; cursor: pointer;">
+              <i class='bx bx-log-out'></i> Logout
+            </button>
+          `;
+        } else {
+          authContainer.innerHTML = `
+            <a href="login.html" class="btn-login">Login</a>
+            <a href="signup.html" class="btn-signup">Sign Up</a>
+          `;
+        }
+      }
+    }
+
+    function logoutUser() {
+      if (confirm('Are you sure you want to logout?')) {
+        localStorage.clear();
+        renderAuthState();
+        window.location.href = "login.html";
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', renderAuthState);
+  </script>
+
+</body>
+</html>

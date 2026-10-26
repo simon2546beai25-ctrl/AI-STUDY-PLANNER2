@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Study Planner - Authentication</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #fdfcfb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #333;
+      overflow-x: hidden;
+      margin: 0;
+    }
+
+    /* =========================================
+       UNIQUE BACKGROUND: BLUISH & YELLOWISH ORBS
+       ========================================= */
+    .animated-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+      background: #fdfcfb;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.65;
+      animation: floatOrbs 25s infinite alternate ease-in-out;
+    }
+
+    /* Yellowish Tone */
+    .orb-1 {
+      width: 55vw;
+      height: 55vw;
+      background: #eee2b1;
+      top: -15%;
+      left: -10%;
+      animation-delay: 0s;
+    }
+
+    /* Bluish Tone */
+    .orb-2 {
+      width: 50vw;
+      height: 50vw;
+      background: #b3ecf8;
+      bottom: -10%;
+      right: -10%;
+      animation-delay: -5s;
+    }
+
+    /* Deep Blue / Soft Yellow Mix */
+    .orb-3 {
+      width: 45vw;
+      height: 45vw;
+      background: #c2d3ed;
+      top: 30%;
+      left: 40%;
+      animation-delay: -10s;
+    }
+
+    @keyframes floatOrbs {
+      0% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(8vw, -8vh) scale(1.1); }
+      66% { transform: translate(-8vw, 10vh) scale(0.9); }
+      100% { transform: translate(10vw, 5vh) scale(1); }
+    }
+
+    /* =========================================
+       SPA & GLASSMORPHISM UI
+       ========================================= */
+    .view-container {
+      width: 100%;
+      max-width: 420px;
+      display: none; 
+      animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      position: relative;
+      z-index: 10;
+      padding: 20px;
+    }
+    
+    .view-container.active { display: block; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Glassmorphism Effect */
+    .card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 1);
+    }
+
+    .header-block { text-align: left; margin-bottom: 25px; }
+    
+    .header-block i.main-icon {
+      font-size: 36px;
+      color: #8c4a27;
+      margin-bottom: 12px;
+      display: inline-block;
+      background: rgba(140, 74, 39, 0.1);
+      padding: 10px;
+      border-radius: 12px;
+    }
+
+    .header-block h2 {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #1a1a1a;
+    }
+
+    .header-block p { color: #555; font-size: 14px; }
+
+    /* Social Buttons */
+    .social-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px;
+      margin-bottom: 12px;
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .social-btn:hover {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(0,0,0,0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.04);
+    }
+
+    .social-btn i { font-size: 20px; }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 24px 0;
+      color: #888;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid rgba(0,0,0,0.1); }
+    .divider:not(:empty)::before { margin-right: 15px; }
+    .divider:not(:empty)::after { margin-left: 15px; }
+
+    /* Main Error Alert Box (Taskade style) */
+    .error-main {
+      display: none;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      background-color: rgba(255, 245, 245, 0.9);
+      border: 1px solid #ffc9c9;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      color: #c92a2a;
+      box-shadow: 0 4px 12px rgba(201, 42, 42, 0.08);
+    }
+    .error-main.active { display: flex; animation: fadeInUp 0.3s ease; }
+    .error-main i { font-size: 20px; margin-top: 2px; }
+    .error-main-content strong { display: block; font-size: 14px; margin-bottom: 4px; }
+    .error-main-content p { font-size: 13px; margin: 0; color: #e03131; }
+
+    /* Success Box */
+    .success-main {
+      display: none;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      background-color: rgba(241, 252, 245, 0.9);
+      border: 1px solid #c3f4d6;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      color: #0ca678;
+    }
+    .success-main.active { display: flex; animation: fadeInUp 0.3s ease; }
+
+    /* Input Fields */
+    .input-group { margin-bottom: 20px; }
+    .input-group input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 12px;
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.5);
+      outline: none;
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
+    }
+    .input-group input:focus {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: #8c4a27;
+      box-shadow: 0 0 0 3px rgba(140, 74, 39, 0.15);
+    }
+
+    /* Input Error States */
+    .input-error {
+      border-color: #fa5252 !important;
+      background-color: rgba(255, 250, 250, 0.8) !important;
+    }
+    .input-error:focus { box-shadow: 0 0 0 3px rgba(250, 82, 82, 0.15) !important; }
+
+    /* Inline Errors */
+    .error-inline {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      color: #e03131;
+      font-size: 12px;
+      margin-top: 8px;
+      font-weight: 500;
+    }
+    .error-inline.active { display: flex; }
+    .error-inline i { font-size: 14px; }
+
+    .text-link {
+      color: #8c4a27;
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .text-link:hover { color: #6a371c; text-decoration: underline; }
+
+    .forgot-link {
+      display: block;
+      text-align: right;
+      font-size: 13px;
+      margin-top: -10px;
+      margin-bottom: 24px;
+    }
+
+    .btn-brown {
+      width: 100%;
+      padding: 15px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      background-color: #8c4a27;
+      color: white;
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(140, 74, 39, 0.2);
+    }
+    .btn-brown:hover { 
+      background-color: #703b1f; 
+      box-shadow: 0 6px 16px rgba(140, 74, 39, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .footer-text {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    /* Custom Modal Alert */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(4px);
+      z-index: 9999; display: none; justify-content: center; align-items: center;
+      opacity: 0; transition: opacity 0.3s ease;
+    }
+    .modal-overlay.active { display: flex; opacity: 1; }
+    .modal-box {
+      background: #ffffff; padding: 30px; border-radius: 16px;
+      text-align: center; max-width: 320px; width: 90%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      transform: translateY(20px); transition: transform 0.3s ease;
+    }
+    .modal-overlay.active .modal-box { transform: translateY(0); }
+    .modal-box i { font-size: 48px; color: #0ca678; margin-bottom: 15px; }
+    .modal-box p { font-size: 15px; color: #333; margin-bottom: 24px; line-height: 1.5; font-weight: 500; }
+  </style>
+</head>
+<body>
+
+  <!-- Animated Bluish Yellowish Background -->
+  <div class="animated-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- ==============================
+       VIEW 1: LOGIN
+       ============================== -->
+  <div id="login-view" class="view-container active">
+    <div class="card">
+      <div class="header-block">
+        <i class='bx bx-brain main-icon'></i>
+        <h2>Log in</h2>
+        <p>Welcome back to AI Study Planner 👋</p>
+      </div>
+
+      <button type="button" class="social-btn" onclick="openSocial('https://accounts.google.com/signin/v2/identifier')">
+        <i class='bx bxl-google' style="color: #DB4437;"></i> Log in with Google
+      </button>
+      <button type="button" class="social-btn" onclick="openSocial('https://appleid.apple.com/sign-in')">
+        <i class='bx bxl-apple'></i> Log in with Apple
+      </button>
+      <button type="button" class="social-btn" onclick="openSocial('https://github.com/login')">
+        <i class='bx bxl-github'></i> Log in with GitHub
+      </button>
+
+      <div class="divider">OR</div>
+
+      <!-- Validation Main Alert Box -->
+      <div id="loginMainError" class="error-main">
+        <i class='bx bxs-error-circle'></i>
+        <div class="error-main-content">
+          <strong>Unable to log in</strong>
+          <p>Please fix the error</p>
+        </div>
+      </div>
+
+      <form id="loginForm">
+        <div class="input-group">
+          <input type="email" id="loginEmail" placeholder="Username or Email">
+          <div id="loginEmailError" class="error-inline">
+            <i class='bx bxs-error-circle'></i><span></span>
+          </div>
+        </div>
+        
+        <div class="input-group">
+          <input type="password" id="loginPassword" placeholder="Password">
+          <div id="loginPasswordError" class="error-inline">
+            <i class='bx bxs-error-circle'></i><span></span>
+          </div>
+        </div>
+
+        <a href="#" class="text-link forgot-link" onclick="switchView('forgot-view', event)">Forgot Password?</a>
+
+        <button type="submit" class="btn-brown">Log in</button>
+      </form>
+
+      <div class="footer-text">
+        Don't have an account? <a href="#" class="text-link" onclick="switchView('signup-view', event)">Sign up</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==============================
+       VIEW 2: SIGN UP
+       ============================== -->
+  <div id="signup-view" class="view-container">
+    <div class="card">
+      <div class="header-block">
+        <i class='bx bx-user-plus main-icon'></i>
+        <h2>Create Account</h2>
+        <p>Start organizing your studies today</p>
+      </div>
+
+      <div id="signupMainError" class="error-main">
+        <i class='bx bxs-error-circle'></i>
+        <div class="error-main-content">
+          <strong>Registration Failed</strong>
+          <p>Please check the fields below</p>
+        </div>
+      </div>
+
+      <form id="signupForm">
+        <div class="input-group">
+          <input type="text" id="signupName" placeholder="Full Name">
+          <div id="signupNameError" class="error-inline">
+            <i class='bx bxs-error-circle'></i><span></span>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <input type="email" id="signupEmail" placeholder="Email address">
+          <div id="signupEmailError" class="error-inline">
+            <i class='bx bxs-error-circle'></i><span></span>
+          </div>
+        </div>
+        
+        <div class="input-group">
+          <input type="password" id="signupPassword" placeholder="Password">
+          <div id="signupPasswordError" class="error-inline">
+            <i class='bx bxs-error-circle'></i><span></span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-brown">Sign Up</button>
+      </form>
+
+      <div class="footer-text">
+        Already have an account? <a href="#" class="text-link" onclick="switchView('login-view', event)">Log in</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==============================
+       VIEW 3: FORGOT PASSWORD
+       ============================== -->
+  <div id="forgot-view" class="view-container">
+    <div class="card">
+      <div class="header-block">
+        <i class='bx bx-lock-open main-icon'></i>
+        <h2>Reset Password</h2>
+        <p>Enter your email to receive reset instructions.</p>
+      </div>
+
+      <div id="forgotSuccess" class="success-main">
+        <i class='bx bxs-check-circle'></i>
+        <p>Instructions sent! Check your inbox.</p>
+      </div>
+
+      <div id="forgotMainError" class="error-main">
+        <i class='bx bxs-error-circle'></i>
+        <div class="error-main-content">
+          <strong>Request Failed</strong>
+          <p>Please provide a valid email.</p>
+        </div>
+      </div>
+
+      <form id="forgotForm">
+        <div class="input-group">
+          <input type="email" id="forgotEmail" placeholder="Email address">
+          <div id="forgotEmailError" class="error-inline">
+            <i class='bx bxs-error-circle'></i><span></span>
+          </div>
+        </div>
+        <button type="submit" class="btn-brown">Send Reset Link</button>
+      </form>
+
+      <div class="footer-text">
+        Remembered it? <a href="#" class="text-link" onclick="switchView('login-view', event)">Back to log in</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Alert Modal -->
+  <div id="customModal" class="modal-overlay">
+    <div class="modal-box">
+      <i class='bx bxs-check-circle'></i>
+      <p id="customModalText"></p>
+      <button id="customModalBtn" class="btn-brown" style="width: auto; padding: 10px 30px;">OK</button>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================
+       SPA NAVIGATION LOGIC
+       ========================================= */
+    function showCustomAlert(message, callback) {
+      const modal = document.getElementById('customModal');
+      const text = document.getElementById('customModalText');
+      const btn = document.getElementById('customModalBtn');
+      
+      text.textContent = message;
+      modal.classList.add('active');
+      
+      // Ensure only one click listener is attached
+      const newBtn = btn.cloneNode(true);
+      btn.parentNode.replaceChild(newBtn, btn);
+      
+      newBtn.addEventListener('click', () => {
+        modal.classList.remove('active');
+        if (callback) callback();
+      });
+    }
+
+    function switchView(viewId, event) {
+      if(event) event.preventDefault();
+      
+      document.querySelectorAll('.view-container').forEach(view => {
+        view.classList.remove('active');
+      });
+      
+      document.querySelectorAll('form').forEach(f => f.reset());
+      clearAllErrors();
+      document.getElementById('forgotSuccess').classList.remove('active');
+
+      document.getElementById(viewId).classList.add('active');
+    }
+
+    function openSocial(url) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    /* =========================================
+       FORM VALIDATION LOGIC
+       ========================================= */
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    function showError(inputEl, errorEl, message) {
+      inputEl.classList.add('input-error');
+      errorEl.classList.add('active');
+      errorEl.querySelector('span').textContent = message;
+    }
+
+    function clearAllErrors() {
+      document.querySelectorAll('.error-main').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('input').forEach(el => el.classList.remove('input-error'));
+      document.querySelectorAll('.error-inline').forEach(el => el.classList.remove('active'));
+    }
+
+    function validatePassword(password) {
+      let errors = [];
+      if (!password) return ["Please enter a password."];
+      if (password.length < 8 || password.length > 12) errors.push("8-12 chars");
+      // if (!/[A-Z]/.test(password)) errors.push("1 uppercase");
+      // if (!/[a-z]/.test(password)) errors.push("1 lowercase");
+      // if (!/[0-9]/.test(password)) errors.push("1 number");
+      // if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) errors.push("1 special char");
+      return errors;
+    }
+
+    // LOGIN
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      clearAllErrors();
+
+      const emailInput = document.getElementById('loginEmail');
+      const passInput = document.getElementById('loginPassword');
+      const emailVal = emailInput.value.trim();
+      const passVal = passInput.value.trim();
+      let hasError = false;
+
+      if (!emailVal) {
+        showError(emailInput, document.getElementById('loginEmailError'), "Please enter a username or email.");
+        hasError = true;
+      } else if (!emailRegex.test(emailVal)) {
+        showError(emailInput, document.getElementById('loginEmailError'), "Please enter a valid email address.");
+        hasError = true;
+      }
+
+      const passErrors = validatePassword(passVal);
+      if (passErrors.length > 0) {
+        const msg = passErrors[0] === "Please enter a password." ? passErrors[0] : "Required: " + passErrors.join(", ");
+        showError(passInput, document.getElementById('loginPasswordError'), msg);
+        hasError = true;
+      }
+
+      if (hasError) {
+        document.getElementById('loginMainError').classList.add('active');
+      } else {
+        // Redirect to dashboard on successful login
+        localStorage.setItem('studyPlannerUser', emailVal.split('@')[0]);
+        showCustomAlert('Login Successful! Redirecting to your Dashboard', () => {
+          window.location.href = 'dashboard.html';
+        });
+      }
+    });
+
+    // SIGNUP
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      clearAllErrors();
+
+      const nameInput = document.getElementById('signupName');
+      const emailInput = document.getElementById('signupEmail');
+      const passInput = document.getElementById('signupPassword');
+      
+      const nameVal = nameInput.value.trim();
+      const emailVal = emailInput.value.trim();
+      const passVal = passInput.value.trim();
+      let hasError = false;
+
+      if (!nameVal || nameVal.length < 2) {
+        showError(nameInput, document.getElementById('signupNameError'), "Please enter your full name.");
+        hasError = true;
+      }
+
+      if (!emailVal || !emailRegex.test(emailVal)) {
+        showError(emailInput, document.getElementById('signupEmailError'), "Please enter a valid email address.");
+        hasError = true;
+      }
+
+      const passErrors = validatePassword(passVal);
+      if (passErrors.length > 0) {
+        const msg = passErrors[0] === "Please enter a password." ? passErrors[0] : "Required: " + passErrors.join(", ");
+        showError(passInput, document.getElementById('signupPasswordError'), msg);
+        hasError = true;
+      }
+
+      if (hasError) {
+        document.getElementById('signupMainError').classList.add('active');
+      } else {
+        // Redirect to dashboard on successful signup
+        localStorage.setItem('studyPlannerUser', nameVal);
+        showCustomAlert('Registration Successful! Redirecting to your Dashboard', () => {
+          window.location.href = 'dashboard.html';
+        });
+      }
+    });
+
+    // FORGOT PASSWORD
+    document.getElementById('forgotForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      clearAllErrors();
+      document.getElementById('forgotSuccess').classList.remove('active');
+
+      const emailInput = document.getElementById('forgotEmail');
+      const emailVal = emailInput.value.trim();
+
+      if (!emailVal || !emailRegex.test(emailVal)) {
+        showError(emailInput, document.getElementById('forgotEmailError'), "Please enter a valid email address.");
+        document.getElementById('forgotMainError').classList.add('active');
+      } else {
+        document.getElementById('forgotForm').reset();
+        document.getElementById('forgotSuccess').classList.add('active');
+      }
+    });
+  </script>
+</body>
+</html>

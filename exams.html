@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exams - AI Study Planner</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+<body>
+
+  <header class="top-nav">
+    <a href="index.html" class="logo">
+      <i class='bx bx-brain'></i>
+      <span>AI Study Planner</span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="timetable.html">Timetable</a>
+      <a href="todo.html">Tasks</a>
+      <a href="exams.html" class="active">Exams</a>
+    </nav>
+    <div class="nav-auth">
+      <!-- Profile Badge Only -->
+      <div class="user-profile-badge" style="display: flex; align-items: center; gap: 8px;">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" alt="Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
+        <div class="user-info">
+          <strong id="displayUserNameHeaderBadge" style="display: block; font-size: 0.85rem; color: #1e293b;">Student</strong>
+          <span id="displayUserLevelHeaderBadge" style="font-size: 0.75rem; color: #64748b;">Level 1 Scholar</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="dashboard-wrapper">
+    <aside class="sidebar">
+      <div class="user-brand">
+        <i class='bx bxs-graduation'></i>
+        <div>
+          <h4>Student Success Hub</h4>
+          <p>Your Journey, Our Support</p>
+        </div>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="dashboard.html"><i class='bx bx-grid-alt'></i> Dashboard</a></li>
+        <li><a href="timetable.html"><i class='bx bx-calendar'></i> Timetable</a></li>
+        <li><a href="todo.html"><i class='bx bx-list-check'></i> To-Do List</a></li>
+        <li><a href="cgpa.html"><i class='bx bx-calculator'></i> CGPA Calculator</a></li>
+        <li><a href="pomodoro.html"><i class='bx bx-timer'></i> Pomodoro Timer</a></li>
+        <li class="active"><a href="exams.html"><i class='bx bx-alarm-exclamation'></i> Exam Countdown</a></li>
+        <li><a href="notes.html"><i class='bx bx-note'></i> Quick Notes</a></li>
+        <li><a href="analysis.html"><i class='bx bx-line-chart'></i> Study Analysis</a></li>
+        <li><a href="brain.html"><i class='bx bx-brain'></i> Brain Gym</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="dashboard-header">
+        <div>
+          <h2>Upcoming University Exams ⏳</h2>
+          <p>Track deadlines, sessional tests, and practicals</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="exam-grid">
+          <div class="exam-card-item">
+            <div>
+              <strong>Data Structures Final</strong>
+              <p style="color:#777; font-size:0.85rem;">25 July, 2026</p>
+            </div>
+            <div class="days-badge">08 <span>Days left</span></div>
+          </div>
+
+          <div class="exam-card-item">
+            <div>
+              <strong>Operating Systems Midterm</strong>
+              <p style="color:#777; font-size:0.85rem;">02 August, 2026</p>
+            </div>
+            <div class="days-badge">16 <span>Days left</span></div>
+          </div>
+
+          <div class="exam-card-item">
+            <div>
+              <strong>AI & Machine Learning Presentation</strong>
+              <p style="color:#777; font-size:0.85rem;">12 August, 2026</p>
+            </div>
+            <div class="days-badge">26 <span>Days left</span></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Central Study Data Service -->
+  <script src="studydata.js"></script>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <i class='bx bx-brain'></i>
+          <span>AI Study Planner</span>
+        </div>
+        <p>Your AI-powered companion to plan smarter, study better and achieve academic excellence.</p>
+        <div class="social-links">
+          <a href="#"><i class='bx bxl-instagram'></i></a>
+          <a href="#"><i class='bx bxl-twitter'></i></a>
+          <a href="#"><i class='bx bxl-linkedin'></i></a>
+          <a href="#"><i class='bx bxl-youtube'></i></a>
+        </div>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="features.html">Features</a></li>
+          <li><a href="plans.html">Plans</a></li>
+          <li><a href="how-it-works.html">How It Works</a></li>
+          <li><a href="about.html">About Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Study Tips</a></li>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="download-app-col">
+        <h4>Download App</h4>
+        <div class="app-badges">
+          <div class="app-btn"><i class='bx bxl-play-store'></i> <span>Google Play</span></div>
+          <div class="app-btn"><i class='bx bxl-apple'></i> <span>App Store</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 AI Study Planner. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Update Profile Badge Info from LocalStorage and StudyData
+    function updateProfileBadge() {
+      const storedUser = localStorage.getItem('studyPlannerUser');
+      const userName = (!storedUser || storedUser.trim() === "") ? "Student" : storedUser;
+
+      const nameBadge = document.getElementById('displayUserNameHeaderBadge');
+      if (nameBadge) nameBadge.innerText = userName;
+
+      const store = window.StudyData || window.SP;
+      if (store && store.stats) {
+        const stats = store.stats();
+        const levelBadge = document.getElementById('displayUserLevelHeaderBadge');
+        if (levelBadge) levelBadge.innerText = 'Level ' + stats.level + ' (' + stats.xp + ' XP)';
+      }
+    }
+
+    window.onload = () => {
+      updateProfileBadge();
+    };
+  </script>
+</body>
+</html>

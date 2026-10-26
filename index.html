@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Study Planner - Home</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="top-nav">
+    <a href="index.html" class="logo">
+      <i class='bx bx-brain'></i>
+      <span>AI Study Planner</span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html" class="active">Home</a>
+      <a href="features.html">Features</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <!-- Dynamic Auth Container -->
+    <div class="nav-auth" id="navAuthContainer">
+      <a href="login.html" class="btn-login">Login</a>
+      <a href="signup.html" class="btn-signup">Sign Up</a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-left">
+      <div class="badge-ai">
+        <i class='bx bxs-magic-wand'></i> ACADEMIC PRODUCTIVITY
+      </div>
+      <h1 class="hero-title">
+        Plan <span class="highlight-brown">Smarter.</span><br>
+        Study <span class="highlight-green">Better.</span><br>
+        Achieve <span class="highlight-brown">More.</span>
+      </h1>
+      <p class="hero-desc">
+        AI Study Planner creates personalized study schedules, tracks your consistency habits, and helps you achieve your highest academic CGPA.
+      </p>
+      <div class="hero-actions">
+        <a href="dashboard.html" class="btn-primary-hero">Get Started Free <i class='bx bx-right-arrow-alt'></i></a>
+        <a href="how-it-works.html" class="btn-secondary-hero"><i class='bx bx-play-circle'></i> How It Works</a>
+      </div>
+      <div class="hero-features-row">
+        <span><i class='bx bx-calendar'></i> Smart Scheduling</span>
+        <span><i class='bx bx-bar-chart-alt-2'></i> Consistency Tracking</span>
+        <span><i class='bx bx-alarm'></i> Exam Alerts</span>
+        <span><i class='bx bx-brain'></i> Brain Gym</span>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="laptop-mockup">
+        <div class="laptop-screen">
+          <div class="mockup-header">
+            <div>
+              <h5>Hello, <span id="heroUserName">Student</span>! 👋</h5>
+              <small>Let's make today productive</small>
+            </div>
+            <div class="mockup-stats-top">
+              <div class="m-stat"><span>Today's Plan</span><strong id="heroTodayTasks">5 Tasks</strong></div>
+              <div class="m-stat"><span>Study Time</span><strong id="heroStudyTime">2h 45m</strong></div>
+              <div class="m-stat"><span>Focus Score</span><strong>88% ⭐</strong></div>
+              <div class="m-stat"><span>Streak</span><strong id="heroStreak">🔥 7 Days</strong></div>
+            </div>
+          </div>
+
+          <div class="mockup-body">
+            <div class="mockup-schedule">
+              <h6>Today's Schedule</h6>
+              <div class="m-task done"><span>Data Structures</span> <span class="status-tag">Done</span></div>
+              <div class="m-task in-p"><span>Operating Systems</span> <span class="status-tag">In Progress</span></div>
+              <div class="m-task in-p"><span>Database Management</span> <span class="status-tag">In Progress</span></div>
+              <div class="m-task todo"><span>Aptitude Practice</span> <span class="status-tag">Todo</span></div>
+            </div>
+            <div class="mockup-progress">
+              <h6>Overall Progress</h6>
+              <div class="progress-dial">
+                <span>75%</span>
+              </div>
+              <div class="exam-mini-alert">
+                <strong>Upcoming Exam</strong>
+                <p>DAA Final in 8 days</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Study Consistency Section (Interactive React Widget) -->
+  <section class="section-container" id="consistency" style="padding-top: 20px;">
+    <div class="section-title">
+      <span class="sub-heading">CONSISTENCY & HABITS</span>
+      <h2>Track Your Study Progress</h2>
+      <p style="color: #666; font-size: 0.95rem; margin-top: 6px;">Visual weekly bar charts, calendar heatmaps, and streak tracking powered by your recorded sessions.</p>
+    </div>
+    <div id="studyConsistencyRoot" style="max-width: 960px; margin: 0 auto;">
+      <!-- Mounted via consistency.js -->
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="section-container" id="testimonials">
+    <div class="section-title">
+      <span class="sub-heading">REVIEWS</span>
+      <h2>What Students Say</h2>
+    </div>
+
+    <div class="testimonials-wrapper">
+      <button class="arrow-btn left-arrow"><i class='bx bx-chevron-left'></i></button>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="student-header">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120" alt="Priya">
+            <div>
+              <h4>Priya Sharma</h4>
+              <span>Chitkara University</span>
+            </div>
+          </div>
+          <p class="quote-text">"AI Study Planner changed the way I study. My consistency and focus have never been this high!"</p>
+          <div class="stars">★★★★★</div>
+        </div>
+        <div class="testimonial-card">
+          <div class="student-header">
+            <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=120" alt="Rohan">
+            <div>
+              <h4>Rohan Verma</h4>
+              <span>VIT University</span>
+            </div>
+          </div>
+          <p class="quote-text">"The smart timetable generator and deadline manager keep me on track without feeling overwhelmed."</p>
+          <div class="stars">★★★★★</div>
+        </div>
+        <div class="testimonial-card">
+          <div class="student-header">
+            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=120" alt="Ananya">
+            <div>
+              <h4>Ananya Singh</h4>
+              <span>Manipal University</span>
+            </div>
+          </div>
+          <p class="quote-text">"The Pomodoro focus mode, streak tracker, and Brain Gym challenges helped me score 9+ CGPA!"</p>
+          <div class="stars">★★★★★</div>
+        </div>
+      </div>
+      <button class="arrow-btn right-arrow"><i class='bx bx-chevron-right'></i></button>
+    </div>
+  </section>
+
+  <!-- CTA Banner Section -->
+  <section class="cta-container">
+    <div class="cta-card">
+      <div class="cta-text">
+        <h2>Ready to Transform Your Study Journey?</h2>
+        <p>Join thousands of university students who are studying smarter and staying consistent.</p>
+        <form class="cta-form" action="dashboard.html">
+          <input type="email" placeholder="Enter your college email" required>
+          <button type="submit" class="btn-cta">Get Started Free</button>
+        </form>
+      </div>
+      <div class="cta-illustration">
+        <img src="https://illustrations.popertee.com/illustration-student.png" alt="Student Studying" onerror="this.src='https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=300'">
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <i class='bx bx-brain'></i>
+          <span>AI Study Planner</span>
+        </div>
+        <p>Your academic companion to plan smarter, study better and achieve academic excellence.</p>
+        <div class="social-links">
+          <a href="#"><i class='bx bxl-instagram'></i></a>
+          <a href="#"><i class='bx bxl-twitter'></i></a>
+          <a href="#"><i class='bx bxl-linkedin'></i></a>
+          <a href="#"><i class='bx bxl-youtube'></i></a>
+        </div>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="features.html">Features</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="how-it-works.html">How It Works</a></li>
+          <li><a href="about.html">About Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Study Tools</h4>
+        <ul>
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="timetable.html">Smart Timetable</a></li>
+          <li><a href="todo.html">Deadline Manager</a></li>
+          <li><a href="analysis.html">Study Analysis</a></li>
+          <li><a href="brain.html">Brain Gym</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="terms.html">Terms of Service</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="download-app-col">
+        <h4>Download App</h4>
+        <div class="app-badges">
+          <div class="app-btn"><i class='bx bxl-play-store'></i> <span>Google Play</span></div>
+          <div class="app-btn"><i class='bx bxl-apple'></i> <span>App Store</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 AI Study Planner. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Central Study Data Service -->
+  <script src="studydata.js"></script>
+  <!-- Browser-compatible React & ReactDOM (No JSX / Build Step) -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Consistency Tracker React Component -->
+  <script src="consistency.js"></script>
+
+  <!-- Dynamic Auth State Check & Real Mockup Stats -->
+  <script>
+    function renderAuthState() {
+      const user = localStorage.getItem('studyPlannerUser');
+      const authContainer = document.getElementById('navAuthContainer');
+      const heroUserName = document.getElementById('heroUserName');
+
+      if (user && user.trim() !== '') {
+        authContainer.innerHTML = `
+          <a href="dashboard.html" class="btn-signup" style="padding: 8px 16px;">
+            <i class='bx bx-user'></i> Dashboard (${user.split(' ')[0]})
+          </a>
+          <button onclick="logoutUser()" class="btn-login" style="color: #e03131; border-color: #ffc9c9;">
+            <i class='bx bx-log-out'></i> Logout
+          </button>
+        `;
+        if (heroUserName) heroUserName.innerText = user.split(' ')[0];
+      } else {
+        authContainer.innerHTML = `
+          <a href="login.html" class="btn-login">Login</a>
+          <a href="signup.html" class="btn-signup">Sign Up</a>
+        `;
+        if (heroUserName) heroUserName.innerText = 'Student';
+      }
+
+      // Update laptop mockup stats if StudyData has information
+      if (window.StudyData) {
+        var s = window.StudyData.stats();
+        var todayMin = window.StudyData.minutesOn(window.StudyData.dkey());
+        var hStreak = document.getElementById('heroStreak');
+        var hStudy = document.getElementById('heroStudyTime');
+        var hTasks = document.getElementById('heroTodayTasks');
+        if (hStreak && s.currentStreak > 0) hStreak.innerText = '🔥 ' + s.currentStreak + ' Days';
+        if (hStudy && todayMin > 0) hStudy.innerText = Math.floor(todayMin / 60) + 'h ' + (todayMin % 60) + 'm';
+        var tasks = window.StudyData.tasks();
+        var pend = tasks.filter(function(t) { return !(t.completed || t.status === 'Completed'); }).length;
+        if (hTasks) hTasks.innerText = pend + ' Tasks';
+      }
+    }
+
+    function logoutUser() {
+      if (confirm('Are you sure you want to logout?')) {
+        localStorage.clear();
+        renderAuthState();
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', renderAuthState);
+  </script>
+
+</body>
+</html>

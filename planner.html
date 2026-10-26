@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planner & Deadlines - AI Study Planner</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="top-nav">
+    <a href="index.html" class="logo">
+      <i class='bx bx-brain'></i>
+      <span>AI Study Planner</span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="timetable.html">Timetable</a>
+      <a href="todo.html">Tasks</a>
+      <a href="analysis.html">Analysis</a>
+      <a href="brain.html">Brain Gym</a>
+    </nav>
+    <div class="nav-auth">
+      <!-- Removed the Dashboard button here for consistency -->
+      <a href="index.html" class="btn-login">Back to Home</a>
+    </div>
+  </header>
+
+  <div class="dashboard-wrapper">
+    <aside class="sidebar">
+      <div class="user-brand">
+        <i class='bx bxs-graduation'></i>
+        <div>
+          <h4>Student Success Hub</h4>
+          <p>Your Journey, Our Support</p>
+        </div>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="dashboard.html"><i class='bx bx-grid-alt'></i> Dashboard</a></li>
+        <li><a href="timetable.html"><i class='bx bx-calendar'></i> Timetable</a></li>
+        <li><a href="todo.html"><i class='bx bx-list-check'></i> To-Do List</a></li>
+        <li><a href="cgpa.html"><i class='bx bx-calculator'></i> CGPA Calculator</a></li>
+        <li><a href="pomodoro.html"><i class='bx bx-timer'></i> Pomodoro Timer</a></li>
+        <li><a href="exams.html"><i class='bx bx-alarm-exclamation'></i> Exam Countdown</a></li>
+        <li><a href="notes.html"><i class='bx bx-note'></i> Quick Notes</a></li>
+        <li><a href="analysis.html"><i class='bx bx-line-chart'></i> Study Analysis</a></li>
+        <li><a href="brain.html"><i class='bx bx-brain'></i> Brain Gym</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="dashboard-header">
+        <div>
+          <h2>Academic Planning Hub 🗓️</h2>
+          <p>Choose your planning tool below or jump straight to Smart Timetables and Deadline Tracking.</p>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+        <div class="card" style="text-align: center; padding: 30px 20px;">
+          <div style="font-size: 2.5rem; color: #8c4a27; margin-bottom: 12px;"><i class='bx bx-calendar-check'></i></div>
+          <h3>Smart Timetable Generator</h3>
+          <!-- Updated description text to remove "hard subjects" -->
+          <p style="color: #666; font-size: 0.88rem; margin: 10px 0 16px;">
+            Rule-based scheduling prioritizing upcoming exams, available hours, and break intervals.
+          </p>
+          <a href="timetable.html" class="btn-brown" style="justify-content: center;">Open Timetable Generator &rarr;</a>
+        </div>
+
+        <div class="card" style="text-align: center; padding: 30px 20px;">
+          <div style="font-size: 2.5rem; color: #5c7c46; margin-bottom: 12px;"><i class='bx bx-task'></i></div>
+          <h3>Priority & Deadline Manager</h3>
+          <p style="color: #666; font-size: 0.88rem; margin: 10px 0 16px;">
+            Filter and sort coursework by priority and deadlines, track overdue tasks, and earn XP.
+          </p>
+          <a href="todo.html" class="btn-green" style="justify-content: center;">Open Deadline Manager &rarr;</a>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <i class='bx bx-brain'></i>
+          <span>AI Study Planner</span>
+        </div>
+        <p>Your AI-powered companion to plan smarter, study better and achieve academic excellence.</p>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="timetable.html">Timetable</a></li>
+          <li><a href="todo.html">Tasks</a></li>
+          <li><a href="analysis.html">Analysis</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Study Tools</h4>
+        <ul>
+          <li><a href="pomodoro.html">Pomodoro Timer</a></li>
+          <li><a href="cgpa.html">CGPA Calculator</a></li>
+          <li><a href="exams.html">Exam Countdown</a></li>
+          <li><a href="brain.html">Brain Gym</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="about.html">About Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 AI Study Planner. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

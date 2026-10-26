@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brain Gym & Mind Games - AI Study Planner</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="top-nav">
+    <a href="index.html" class="logo">
+      <i class='bx bx-brain'></i>
+      <span>AI Study Planner</span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="timetable.html">Timetable</a>
+      <a href="todo.html">Tasks</a>
+      <a href="analysis.html">Analysis</a>
+      <a href="brain.html" class="active">Brain Gym</a>
+    </nav>
+    <div class="nav-auth">
+      <!-- Profile Badge Only -->
+      <div class="user-profile-badge" style="display: flex; align-items: center; gap: 8px;">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" alt="Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
+        <div class="user-info">
+          <strong id="displayUserNameHeaderBadge" style="display: block; font-size: 0.85rem; color: #1e293b;">Student</strong>
+          <span id="displayUserLevelHeaderBadge" style="font-size: 0.75rem; color: #64748b;">Level 1 Scholar</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="dashboard-wrapper">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="user-brand">
+        <i class='bx bxs-graduation'></i>
+        <div>
+          <h4>Student Success Hub</h4>
+          <p>Your Journey, Our Support</p>
+        </div>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="dashboard.html"><i class='bx bx-grid-alt'></i> Dashboard</a></li>
+        <li><a href="timetable.html"><i class='bx bx-calendar'></i> Timetable</a></li>
+        <li><a href="todo.html"><i class='bx bx-list-check'></i> To-Do List</a></li>
+        <li><a href="cgpa.html"><i class='bx bx-calculator'></i> CGPA Calculator</a></li>
+        <li><a href="pomodoro.html"><i class='bx bx-timer'></i> Pomodoro Timer</a></li>
+        <li><a href="exams.html"><i class='bx bx-alarm-exclamation'></i> Exam Countdown</a></li>
+        <li><a href="notes.html"><i class='bx bx-note'></i> Quick Notes</a></li>
+        <li><a href="analysis.html"><i class='bx bx-line-chart'></i> Study Analysis</a></li>
+        <li class="active"><a href="brain.html"><i class='bx bx-brain'></i> Brain Gym</a></li>
+      </ul>
+      <div class="sidebar-quote">
+        <p>"A sharp mind retains complex concepts twice as fast."</p>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="dashboard-header">
+        <div>
+          <h2>Brain Gym & Mind Games 🧠</h2>
+          <p>Sharpen your memory, logic, and speed. XP and badges are awarded upon completion.</p>
+        </div>
+        <div id="gStats" style="background:#fff; padding:10px 18px; border:1px solid #f0ede8; border-radius:8px; font-size:0.88rem; box-shadow:0 2px 8px rgba(0,0,0,0.03);">
+          <!-- Dynamic XP, Level, Games stats -->
+        </div>
+      </div>
+
+      <!-- Game Arena Card -->
+      <div class="card">
+        <div class="card-head">
+          <h4><i class='bx bx-joystick'></i> Game Station</h4>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+            <select id="gGame" class="priority-select" onchange="resetAreaPrompt()">
+              <option value="Memory Match">1. Memory Match</option>
+              <option value="Coding Quiz">2. Beginner Coding Quiz</option>
+              <option value="2048">3. 2048 (Tile Match)</option>
+            </select>
+            <select id="gLv" class="priority-select">
+              <option value="1">Level: Easy</option>
+              <option value="2">Level: Medium</option>
+              <option value="3">Level: Hard</option>
+            </select>
+            <button class="btn-brown" onclick="startGame()">
+              <i class='bx bx-play'></i> Start / Replay
+            </button>
+          </div>
+        </div>
+
+        <!-- Interactive Game Arena -->
+        <div id="gArea" style="min-height: 220px; padding: 16px 0; border-top: 1px solid #faf8f5;">
+          <div style="text-align:center; padding: 40px 20px; color:#777;">
+            <i class='bx bx-brain' style="font-size:3rem; color:#8c4a27; margin-bottom:12px; display:block;"></i>
+            <h3>Welcome to Brain Gym!</h3>
+            <p style="margin-top:6px; font-size:0.9rem;">Select a game and difficulty level above, then click <strong>"Start / Replay"</strong> to play.</p>
+          </div>
+        </div>
+
+        <div id="gMsg" style="font-weight:600; color:#5c7c46; margin-top:12px;"></div>
+      </div>
+
+      <!-- Badge Collection & Best Scores Card -->
+      <div class="card" style="margin-top: 24px;">
+        <div class="card-head">
+          <h4><i class='bx bx-medal'></i> Badges & Achievements</h4>
+          <span style="font-size:0.8rem; color:#777;">Earn XP by studying, completing tasks, and finishing games</span>
+        </div>
+
+        <div id="gBadges" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+          <!-- Dynamic Badge Pills -->
+        </div>
+
+        <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid #f0ede8;">
+          <h5 style="color:#555; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">Personal Best Scores:</h5>
+          <p id="gBest" style="color:#333; font-size:0.9rem; font-weight:500;">None yet. Play a game to record your best scores!</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Dashboard Footer (Exact Copy) -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <i class='bx bx-brain'></i>
+          <span>AI Study Planner</span>
+        </div>
+        <p>Your AI-powered companion to plan smarter, study better and achieve academic excellence.</p>
+        <div class="social-links">
+          <a href="#"><i class='bx bxl-instagram'></i></a>
+          <a href="#"><i class='bx bxl-twitter'></i></a>
+          <a href="#"><i class='bx bxl-linkedin'></i></a>
+          <a href="#"><i class='bx bxl-youtube'></i></a>
+        </div>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="features.html">Features</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="how-it-works.html">How It Works</a></li>
+          <li><a href="about.html">About Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Study Tools</h4>
+        <ul>
+          <li><a href="timetable.html">Smart Timetable</a></li>
+          <li><a href="todo.html">Deadline Manager</a></li>
+          <li><a href="analysis.html">Study Analysis</a></li>
+          <li><a href="brain.html">Brain Gym</a></li>
+          <li><a href="pomodoro.html">Focus Timer</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="download-app-col">
+        <h4>Download App</h4>
+        <div class="app-badges">
+          <div class="app-btn"><i class='bx bxl-play-store'></i> <span>Google Play</span></div>
+          <div class="app-btn"><i class='bx bxl-apple'></i> <span>App Store</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 AI Study Planner. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Central Data Layer -->
+  <script src="studydata.js"></script>
+  <!-- Browser React (Without JSX) for Interactive Games -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+  <script>
+    // User Profile Sync from LocalStorage
+    const storedUser = localStorage.getItem('studyPlannerUser');
+    const userName = (!storedUser || storedUser.trim() === "") ? "Student" : storedUser;
+
+    var nameBadge = document.getElementById('displayUserNameHeaderBadge');
+    if (nameBadge) nameBadge.innerText = userName;
+
+    var area = document.getElementById('gArea');
+    var gMsg = document.getElementById('gMsg');
+    var gStats = document.getElementById('gStats');
+    var gBadges = document.getElementById('gBadges');
+    var gBest = document.getElementById('gBest');
+    var reactRoot = null;
+    var h = React.createElement;
+
+    var ICONS = ['🍎', '🚀', '📚', '🎯', '💡', '🧪', '🎧', '🌟', '🔥', '🧩', '⚽', '🎨'];
+
+    function randomInt(n) { return Math.floor(Math.random() * n); }
+    function shuffle(arr) { return arr.slice().sort(function () { return Math.random() - 0.5; }); }
+
+    function resetAreaPrompt() {
+      if (reactRoot) { reactRoot.unmount(); reactRoot = null; }
+      gMsg.textContent = '';
+      area.innerHTML = '<div style="text-align:center; padding: 40px 20px; color:#777;">' +
+        '<p>Selected: <strong>' + document.getElementById('gGame').value + '</strong>. Click <strong>"Start / Replay"</strong> to begin!</p></div>';
+    }
+
+    // ==========================================
+    // 1. REACT COMPONENT: MEMORY MATCH
+    // ==========================================
+    function MemoryGame(props) {
+      var useState = React.useState;
+      var useEffect = React.useEffect;
+      var pairCount = props.pairs;
+      var cards = useState(function () {
+        var selected = ICONS.slice(0, pairCount);
+        return shuffle(selected.concat(selected));
+      })[0];
+
+      var [opened, setOpened] = useState([]);
+      var [matched, setMatched] = useState([]);
+      var [moves, setMoves] = useState(0);
+
+      function handleCardClick(idx) {
+        if (opened.length === 2) return;
+        if (opened.indexOf(idx) > -1 || matched.indexOf(idx) > -1) return;
+
+        var nextOpened = opened.concat(idx);
+        setOpened(nextOpened);
+
+        if (nextOpened.length === 2) {
+          var newMoves = moves + 1;
+          setMoves(newMoves);
+          setTimeout(function () {
+            if (cards[nextOpened[0]] === cards[nextOpened[1]]) {
+              var nextMatched = matched.concat(nextOpened);
+              setMatched(nextMatched);
+              if (nextMatched.length === cards.length) props.onComplete(newMoves, pairCount);
+            }
+            setOpened([]);
+          }, 700);
+        }
+      }
+
+      return h('div', { style: { textAlign: 'center' } },
+        h('div', { style: { display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '14px', fontSize: '0.9rem', color: '#555' } },
+          h('span', null, 'Moves: ', h('strong', { style: { color: '#8c4a27' } }, moves)),
+          h('span', null, 'Pairs Matched: ', h('strong', { style: { color: '#5c7c46' } }, matched.length / 2 + ' / ' + pairCount))
+        ),
+        h('div', { className: 'mem-grid' },
+          cards.map(function (symbol, idx) {
+            var isRevealed = opened.indexOf(idx) > -1 || matched.indexOf(idx) > -1;
+            var isMatched = matched.indexOf(idx) > -1;
+            return h('button', {
+              key: idx, type: 'button',
+              className: 'mem-card' + (isMatched ? ' done' : ''),
+              onClick: function () { handleCardClick(idx); }
+            }, isRevealed ? symbol : '❓');
+          })
+        )
+      );
+    }
+
+    // ==========================================
+    // 2. REACT COMPONENT: 2048 GAME
+    // ==========================================
+    function Game2048(props) {
+      var useState = React.useState;
+      var useEffect = React.useEffect;
+
+      var [board, setBoard] = useState(function(){
+        var b = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+        addRandom(b); addRandom(b);
+        return b;
+      });
+      var [score, setScore] = useState(0);
+      var [gameOver, setGameOver] = useState(false);
+
+      function addRandom(b) {
+        var empty = [];
+        for(var r=0; r<4; r++) for(var c=0; c<4; c++) if(b[r][c]===0) empty.push({r:r, c:c});
+        if(empty.length > 0) {
+          var pick = empty[Math.floor(Math.random()*empty.length)];
+          b[pick.r][pick.c] = Math.random() < 0.9 ? 2 : 4;
+        }
+      }
+
+      function checkGameOver(b) {
+        for(var r=0; r<4; r++) {
+          for(var c=0; c<4; c++) {
+            if(b[r][c] === 0) return false;
+            if(c < 3 && b[r][c] === b[r][c+1]) return false;
+            if(r < 3 && b[r][c] === b[r+1][c]) return false;
+          }
+        }
+        return true;
+      }
+
+      useEffect(function() {
+        if(gameOver) return;
+        function handleKeyDown(e) {
+          var handled = false;
+          var currentScore = {val: score};
+          var b = JSON.parse(JSON.stringify(board));
+          var moved = false;
+
+          function rotateLeft(mat) {
+            var res = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+            for(var i=0;i<4;i++) for(var j=0;j<4;j++) res[i][j] = mat[j][3-i];
+            return res;
+          }
+          function rotateRight(mat) {
+            var res = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+            for(var i=0;i<4;i++) for(var j=0;j<4;j++) res[i][j] = mat[3-j][i];
+            return res;
+          }
+          function slideLeft(mat) {
+            var m = false;
+            for(var r=0; r<4; r++) {
+               var row = mat[r].filter(function(v){return v!==0;});
+               for(var i=0; i<row.length-1; i++) {
+                  if(row[i] === row[i+1]) {
+                     row[i] *= 2; currentScore.val += row[i]; row.splice(i+1, 1);
+                  }
+               }
+               while(row.length < 4) row.push(0);
+               for(var c=0; c<4; c++) {
+                  if(mat[r][c] !== row[c]) m = true;
+                  mat[r][c] = row[c];
+               }
+            }
+            return m;
+          }
+
+          if(e.key === 'ArrowLeft') { moved = slideLeft(b); handled=true; }
+          else if(e.key === 'ArrowRight') { b=rotateRight(rotateRight(b)); moved = slideLeft(b); b=rotateLeft(rotateLeft(b)); handled=true; }
+          else if(e.key === 'ArrowUp') { b=rotateLeft(b); moved = slideLeft(b); b=rotateRight(b); handled=true; }
+          else if(e.key === 'ArrowDown') { b=rotateRight(b); moved = slideLeft(b); b=rotateLeft(b); handled=true; }
+
+          if(handled) {
+            e.preventDefault();
+            if(moved) {
+              addRandom(b);
+              setBoard(b);
+              setScore(currentScore.val);
+              if(checkGameOver(b)) setGameOver(true);
+            }
+          }
+        }
+        window.addEventListener('keydown', handleKeyDown);
+        return function() { window.removeEventListener('keydown', handleKeyDown); };
+      }, [board, score, gameOver]);
+
+      var gridStyle = {
+        display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px',
+        background: '#bbada0', padding: '8px', borderRadius: '8px',
+        width: '280px', margin: '16px auto'
+      };
+
+      return h('div', {style: {textAlign: 'center'}},
+        h('div', {style: {fontSize: '1.1rem', color: '#555', marginBottom:'10px'}},
+          'Score: ', h('strong', {style:{color:'#8c4a27'}}, score)
+        ),
+        gameOver ? h('div', {style:{color:'#e03131', fontWeight:'bold', fontSize:'1.2rem', marginBottom:'10px'}}, 'Game Over!') : null,
+        h('div', {style: gridStyle},
+          board.map(function(row, r) {
+            return row.map(function(val, c) {
+              var colors = {0:'#cdc1b4', 2:'#eee4da', 4:'#ede0c8', 8:'#f2b179', 16:'#f59563', 32:'#f67c5f', 64:'#f65e3b', 128:'#edcf72', 256:'#edcc61', 512:'#edc850', 1024:'#edc53f', 2048:'#edc22e'};
+              var cellStyle = {
+                background: colors[val] || '#3c3a32',
+                color: val > 4 ? '#f9f6f2' : '#776e65',
+                height: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: val > 100 ? '1.2rem' : '1.5rem', fontWeight: 'bold', borderRadius: '4px'
+              };
+              return h('div', {key: r + '-' + c, style: cellStyle}, val || '');
+            });
+          })
+        ),
+        h('p', {style:{fontSize:'0.85rem', color:'#888', margin:'12px 0'}}, 'Use Arrow Keys (⬅️ ⬆️ ⬇️ ➡️) to merge tiles.'),
+        h('button', {
+          type: 'button', className: 'btn-brown',
+          onClick: function() { props.onComplete(score); }
+        }, 'Finish Game & Claim XP')
+      );
+    }
+
+    // ==========================================
+    // 3. CODING QUIZ GENERATOR
+    // ==========================================
+    var CODING_QUESTIONS = [
+      { q: 'In JavaScript, what does `typeof null` evaluate to?', o: ['"null"', '"object"', '"undefined"', '"number"'], a: 1, e: 'Historical bug in JS: typeof null returns "object".' },
+      { q: 'Which HTML element is used to include executable JavaScript code?', o: ['<javascript>', '<script>', '<js>', '<code>'], a: 1, e: 'The standard element for scripts in HTML is <script>.' },
+      { q: 'What is the average time complexity of Binary Search on a sorted array?', o: ['O(N)', 'O(log N)', 'O(N log N)', 'O(1)'], a: 1, e: 'Binary Search halves the search interval each step, giving O(log N).' },
+      { q: 'Which SQL keyword is used to eliminate duplicate records?', o: ['UNIQUE', 'DISTINCT', 'DIFFERENT', 'FILTER'], a: 1, e: 'The SELECT DISTINCT statement is used to return unique values.' },
+      { q: 'Which data structure follows the LIFO principle?', o: ['Queue', 'Stack', 'Array', 'Linked List'], a: 1, e: 'A Stack pushes and pops from the top, following Last In, First Out.' },
+      { q: 'What does CSS stand for in web development?', o: ['Cascading Style Sheets', 'Computer Styling System', 'Creative Sheet Styles', 'Color Sheet Syntax'], a: 0, e: 'CSS stands for Cascading Style Sheets.' }
+    ];
+
+    function buildQuizRound() {
+      return shuffle(CODING_QUESTIONS).slice(0, 5);
+    }
+
+    // ==========================================
+    // 4. STATS & BADGE DISPLAY
+    // ==========================================
+    function updateStatsDisplay() {
+      var store = window.StudyData || window.SP;
+      if (!store) return;
+
+      var g = store.games();
+      var s = store.stats();
+
+      var levelBadge = document.getElementById('displayUserLevelHeaderBadge');
+      if (levelBadge) levelBadge.innerText = 'Level ' + s.level + ' (' + s.xp + ' XP)';
+
+      gStats.innerHTML =
+        '<div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">' +
+          '<span>🎮 Games Played: <strong style="color:#8c4a27;">' + (g.plays || 0) + '</strong></span>' +
+          '<span>⭐ Level: <strong style="color:#5c7c46;">' + s.level + '</strong> (' + s.xp + ' XP)</span>' +
+          '<span>🔥 Streak: <strong>' + s.currentStreak + ' Days</strong></span>' +
+        '</div>';
+
+      gBadges.innerHTML = store.badges.map(function (b) {
+        var isUnlocked = s.unlocked.some(function (u) { return u.id === b.id; });
+        return '<span class="badge-pill ' + (isUnlocked ? 'unlocked' : '') + '" title="' + b.desc + ' (' + (isUnlocked ? 'Unlocked!' : 'Locked') + ')">' +
+          '<i class="bx ' + b.icon + '"></i> ' + b.name + (isUnlocked ? ' ✓' : ' 🔒') + '</span>';
+      }).join('');
+
+      var bestKeys = Object.keys(g.best || {});
+      if (bestKeys.length === 0) {
+        gBest.textContent = 'None yet. Play a game to record your best scores!';
+      } else {
+        gBest.innerHTML = bestKeys.map(function (k) {
+          return '<span style="display:inline-block; margin-right:16px; background:#faf8f5; border:1px solid #f0ede8; padding:4px 10px; border-radius:6px;">' +
+            '<strong>' + k + ':</strong> ' + g.best[k] + ' pts</span>';
+        }).join('');
+      }
+    }
+
+    // ==========================================
+    // 5. GAME CONTROLLER
+    // ==========================================
+    function startGame() {
+      if (reactRoot) { reactRoot.unmount(); reactRoot = null; }
+      gMsg.textContent = '';
+      area.innerHTML = ''; // Clear prompt
+
+      var gameName = document.getElementById('gGame').value;
+      var level = +document.getElementById('gLv').value || 1;
+      var store = window.StudyData || window.SP;
+
+      // --- MEMORY MATCH ---
+      if (gameName === 'Memory Match') {
+        var pairsCount = level === 1 ? 4 : level === 2 ? 6 : 8;
+        reactRoot = ReactDOM.createRoot(area);
+        reactRoot.render(h(MemoryGame, {
+          key: Date.now(),
+          pairs: pairsCount,
+          onComplete: function (totalMoves, pairs) {
+            var score = Math.min(10, Math.max(2, Math.round(10 * (pairs * 2) / totalMoves)));
+            if (store) store.recordGame(gameName, score, 10);
+            gMsg.innerHTML = '🎉 Excellent! Completed in ' + totalMoves + ' moves! Awarded score: <strong>' + score + '/10</strong> and XP! Click "Start / Replay" to play again.';
+            updateStatsDisplay();
+          }
+        }));
+        return;
+      }
+
+      // --- 2048 GAME ---
+      if (gameName === '2048') {
+        reactRoot = ReactDOM.createRoot(area);
+        reactRoot.render(h(Game2048, {
+          key: Date.now(),
+          onComplete: function (finalScore) {
+            var score10 = Math.min(10, Math.max(1, Math.floor(finalScore / 200)));
+            if (store) store.recordGame(gameName, score10, 10);
+            gMsg.innerHTML = '🎉 Game Finished! Your 2048 Score: ' + finalScore + '! Awarded points: <strong>' + score10 + '/10</strong> and XP! Click "Start / Replay" to play again.';
+            updateStatsDisplay();
+          }
+        }));
+        return;
+      }
+
+      // --- CODING QUIZ ---
+      if (gameName === 'Coding Quiz') {
+        var roundQuestions = buildQuizRound();
+        var currentIdx = 0;
+        var roundScore = 0;
+
+        function renderQuestion() {
+          var item = roundQuestions[currentIdx];
+          area.innerHTML =
+            '<div style="max-width:560px; margin: 0 auto;">' +
+              '<div style="display:flex; justify-content:space-between; color:#777; font-size:0.85rem; margin-bottom:10px;">' +
+                '<span>Question ' + (currentIdx + 1) + ' of ' + roundQuestions.length + '</span>' +
+                '<span>Current Score: <strong style="color:#5c7c46;">' + roundScore + '</strong></span>' +
+              '</div>' +
+              '<h3 style="font-size:1.15rem; color:#222; margin-bottom:16px;">' + item.q + '</h3>' +
+              '<div id="optContainer"></div>' +
+              '<div id="explainBox" style="margin-top:14px;"></div>' +
+            '</div>';
+
+          var optContainer = document.getElementById('optContainer');
+          var explainBox = document.getElementById('explainBox');
+
+          item.o.forEach(function (optText, optIdx) {
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'opt-btn';
+            btn.textContent = optText;
+
+            btn.onclick = function () {
+              var allBtns = optContainer.querySelectorAll('.opt-btn');
+              allBtns.forEach(function (b) { b.disabled = true; });
+
+              var isCorrect = optIdx === item.a;
+              if (isCorrect) {
+                roundScore++;
+                btn.classList.add('ok');
+              } else {
+                btn.classList.add('bad');
+                if (allBtns[item.a]) allBtns[item.a].classList.add('ok');
+              }
+
+              explainBox.innerHTML =
+                '<div style="padding:10px 14px; border-radius:8px; background:' + (isCorrect ? '#e8f2e6' : '#fff5f5') + '; border:1px solid ' + (isCorrect ? '#5c7c46' : '#ffa8a8') + '; margin-bottom:14px;">' +
+                  '<strong>' + (isCorrect ? '✅ Correct! ' : '❌ Incorrect. ') + '</strong>' +
+                  '<span style="font-size:0.88rem; color:#333;">' + item.e + '</span>' +
+                '</div>' +
+                '<button type="button" class="btn-brown" id="nextQBtn">' +
+                  (currentIdx < roundQuestions.length - 1 ? 'Next Question →' : 'Complete Challenge & Award XP') +
+                '</button>';
+
+              document.getElementById('nextQBtn').onclick = function () {
+                currentIdx++;
+                if (currentIdx < roundQuestions.length) renderQuestion();
+                else finishChallenge();
+              };
+            };
+            optContainer.appendChild(btn);
+          });
+        }
+
+        function finishChallenge() {
+          if (store) store.recordGame(gameName, roundScore, 5);
+          area.innerHTML =
+            '<div style="text-align:center; padding:30px 20px;">' +
+              '<i class="bx bxs-trophy" style="font-size:3.2rem; color:#8c4a27; margin-bottom:8px; display:block;"></i>' +
+              '<h3>Challenge Completed!</h3>' +
+              '<p style="font-size:1.1rem; margin:10px 0;">Your Final Score: <strong style="color:#5c7c46;">' + roundScore + ' / 5</strong></p>' +
+              '<p style="color:#666; font-size:0.88rem;">XP points and badge checks have been recorded to your profile!</p>' +
+              '<button type="button" class="btn-brown" style="margin-top:16px;" onclick="startGame()">' +
+                '<i class="bx bx-refresh"></i> Play Another Round' +
+              '</button>' +
+            '</div>';
+
+          gMsg.textContent = 'Challenge finished! XP points awarded to your profile.';
+          updateStatsDisplay();
+        }
+
+        renderQuestion();
+      }
+    }
+
+    // Initialize stats & badges on page load
+    window.addEventListener('DOMContentLoaded', updateStatsDisplay);
+  </script>
+</body>
+</html>

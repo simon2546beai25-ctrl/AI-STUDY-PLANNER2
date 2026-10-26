@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How It Works - AI Study Planner</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+<body>
+
+  <header class="top-nav">
+    <a href="index.html" class="logo">
+      <i class='bx bx-brain'></i>
+      <span>AI Study Planner</span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="features.html">Features</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="how-it-works.html" class="active">How It Works</a>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav-auth" id="navAuthContainer">
+      <a href="login.html" class="btn-login">Login</a>
+      <a href="signup.html" class="btn-signup">Sign Up</a>
+    </div>
+  </header>
+
+  <section class="section-container">
+    <div class="section-title">
+      <span class="sub-heading">HOW IT WORKS</span>
+      <h2>Your Success in 3 Simple Steps</h2>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-badge">1</div>
+        <div class="step-icon"><i class='bx bx-user-plus'></i></div>
+        <h3>1. Input Details & Subjects</h3>
+        <p>Enter your course details, exam dates, lecture schedule, and target grades into your profile.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-badge">2</div>
+        <div class="step-icon"><i class='bx bx-brain'></i></div>
+        <h3>2. AI Generates Roadmap</h3>
+        <p>Our AI analyzes credit weights and topics to build dynamic daily routines with rest breaks.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-badge">3</div>
+        <div class="step-icon"><i class='bx bx-trophy'></i></div>
+        <h3>3. Track & Score High</h3>
+        <p>Complete tasks, execute pomodoro focus timers, update your CGPA, and stay stress-free.</p>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="dashboard.html" class="btn-primary-hero">Try It Out Now &rarr;</a>
+    </div>
+  </section>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <i class='bx bx-brain'></i>
+          <span>AI Study Planner</span>
+        </div>
+        <p>Your AI-powered companion to plan smarter, study better and achieve academic excellence.</p>
+        <div class="social-links">
+          <a href="#"><i class='bx bxl-instagram'></i></a>
+          <a href="#"><i class='bx bxl-twitter'></i></a>
+          <a href="#"><i class='bx bxl-linkedin'></i></a>
+          <a href="#"><i class='bx bxl-youtube'></i></a>
+        </div>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="features.html">Features</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="how-it-works.html">How It Works</a></li>
+          <li><a href="about.html">About Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Study Tips</a></li>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="download-app-col">
+        <h4>Download App</h4>
+        <div class="app-badges">
+          <div class="app-btn"><i class='bx bxl-play-store'></i> <span>Google Play</span></div>
+          <div class="app-btn"><i class='bx bxl-apple'></i> <span>App Store</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 AI Study Planner. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Dynamic Authentication Script -->
+  <script>
+    function renderAuthState() {
+      const user = localStorage.getItem('studyPlannerUser');
+      const authContainer = document.getElementById('navAuthContainer');
+      if (authContainer) {
+        if (user && user.trim() !== '') {
+          authContainer.innerHTML = `
+            <a href="dashboard.html" class="btn-signup" style="padding: 8px 16px;">
+              <i class='bx bx-user'></i> Dashboard (${user.split(' ')[0]})
+            </a>
+            <button onclick="logoutUser()" class="btn-login" style="color: #e03131; border-color: #ffc9c9; cursor: pointer;">
+              <i class='bx bx-log-out'></i> Logout
+            </button>
+          `;
+        } else {
+          authContainer.innerHTML = `
+            <a href="login.html" class="btn-login">Login</a>
+            <a href="signup.html" class="btn-signup">Sign Up</a>
+          `;
+        }
+      }
+    }
+
+    function logoutUser() {
+      if (confirm('Are you sure you want to logout?')) {
+        localStorage.clear();
+        renderAuthState();
+        window.location.href = "login.html";
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', renderAuthState);
+  </script>
+
+</body>
+</html>

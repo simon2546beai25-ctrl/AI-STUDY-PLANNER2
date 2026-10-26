@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Focus Timer - AI Study Planner</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <style>
+    .mode-btn {
+      padding: 8px 16px;
+      border: 1px solid #d5c8be;
+      background: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: 0.2s ease;
+    }
+    .mode-btn.active {
+      background: #8c4a27;
+      color: #fff;
+      border-color: #8c4a27;
+    }
+    .custom-time-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 15px auto 25px;
+      max-width: 420px;
+      background: #faf8f5;
+      padding: 12px 18px;
+      border-radius: 8px;
+      border: 1px dashed #d5c8be;
+    }
+    .custom-input {
+      width: 90px;
+      padding: 8px 12px;
+      border: 1px solid #d5c8be;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-align: center;
+      background: #fff;
+    }
+    .btn-set-custom {
+      padding: 8px 16px;
+      background: #8c4a27;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .btn-set-custom:hover {
+      background: #763c1e;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="top-nav">
+    <a href="index.html" class="logo">
+      <i class='bx bx-brain'></i>
+      <span>AI Study Planner</span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="timetable.html">Timetable</a>
+      <a href="todo.html">Tasks</a>
+      <a href="analysis.html">Analysis</a>
+      <a href="brain.html">Brain Gym</a>
+    </nav>
+    <div class="nav-auth">
+      <!-- Profile Badge Only -->
+      <div class="user-profile-badge" style="display: flex; align-items: center; gap: 8px;">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" alt="Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
+        <div class="user-info">
+          <strong id="displayUserNameHeaderBadge" style="display: block; font-size: 0.85rem; color: #1e293b;">Student</strong>
+          <span id="displayUserLevelHeaderBadge" style="font-size: 0.75rem; color: #64748b;">Level 1 Scholar</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="dashboard-wrapper">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="user-brand">
+        <i class='bx bxs-graduation'></i>
+        <div>
+          <h4>Student Success Hub</h4>
+          <p>Your Journey, Our Support</p>
+        </div>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="dashboard.html"><i class='bx bx-grid-alt'></i> Dashboard</a></li>
+        <li><a href="timetable.html"><i class='bx bx-calendar'></i> Timetable</a></li>
+        <li><a href="todo.html"><i class='bx bx-list-check'></i> To-Do List</a></li>
+        <li><a href="cgpa.html"><i class='bx bx-calculator'></i> CGPA Calculator</a></li>
+        <li class="active"><a href="pomodoro.html"><i class='bx bx-timer'></i> Pomodoro Timer</a></li>
+        <li><a href="exams.html"><i class='bx bx-alarm-exclamation'></i> Exam Countdown</a></li>
+        <li><a href="notes.html"><i class='bx bx-note'></i> Quick Notes</a></li>
+        <li><a href="analysis.html"><i class='bx bx-line-chart'></i> Study Analysis</a></li>
+        <li><a href="brain.html"><i class='bx bx-brain'></i> Brain Gym</a></li>
+      </ul>
+      <div class="sidebar-quote">
+        <p>"Deep focus produces extraordinary academic results in ordinary time."</p>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="dashboard-header">
+        <div>
+          <h2>Custom Focus Timer ⏱️</h2>
+          <p>Select a preset or set custom minutes. Completed sessions are automatically recorded into your study history!</p>
+        </div>
+        <!-- Live Clock -->
+        <div style="background: #fff; padding: 10px 18px; border: 1px solid #f0ede8; border-radius: 8px; text-align: right;">
+          <small style="color: #888; display:block;">Current Time</small>
+          <strong id="liveClock" style="font-size: 1.1rem; color: #8c4a27;">--:--:--</strong>
+        </div>
+      </div>
+
+      <div class="card pomodoro-box">
+        
+        <!-- Preset Mode Buttons -->
+        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+          <button class="mode-btn active" onclick="setPresetTimer(25, this)">25 min (Standard)</button>
+          <button class="mode-btn" onclick="setPresetTimer(45, this)">45 min (Deep Study)</button>
+          <button class="mode-btn" onclick="setPresetTimer(60, this)">60 min (Full Hour)</button>
+          <button class="mode-btn" onclick="setPresetTimer(5, this)">5 min (Break)</button>
+          <button class="mode-btn" onclick="setPresetTimer(15, this)">15 min (Long Break)</button>
+        </div>
+
+        <!-- Custom User Input Box -->
+        <div class="custom-time-bar">
+          <label style="font-size: 0.85rem; font-weight: 600; color: #444;">Custom Time:</label>
+          <input type="number" id="customMinutesInput" min="1" max="180" placeholder="Minutes" class="custom-input">
+          <button class="btn-set-custom" onclick="applyCustomTime()">Set Time</button>
+        </div>
+
+        <!-- Circular Display -->
+        <div class="timer-circle" id="timerContainer">
+          <h2 id="timeDisplay">25:00</h2>
+          <p id="timerLabel">Focus Session</p>
+        </div>
+
+        <!-- Controls -->
+        <div class="timer-actions">
+          <button class="btn-start" id="startBtn" onclick="toggleTimer()">Start Session</button>
+          <button class="btn-reset" onclick="resetTimer()"><i class='bx bx-refresh'></i> Reset</button>
+        </div>
+
+        <div id="pomoRewardMsg" style="margin-top: 16px; font-weight: 600; color: #5c7c46; display: none;"></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <i class='bx bx-brain'></i>
+          <span>AI Study Planner</span>
+        </div>
+        <p>Your AI-powered companion to plan smarter, study better and achieve academic excellence.</p>
+        <div class="social-links">
+          <a href="#"><i class='bx bxl-instagram'></i></a>
+          <a href="#"><i class='bx bxl-twitter'></i></a>
+          <a href="#"><i class='bx bxl-linkedin'></i></a>
+          <a href="#"><i class='bx bxl-youtube'></i></a>
+        </div>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="features.html">Features</a></li>
+          <li><a href="plans.html">Plans</a></li>
+          <li><a href="how-it-works.html">How It Works</a></li>
+          <li><a href="about.html">About Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Study Tools</h4>
+        <ul>
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="timetable.html">Timetable</a></li>
+          <li><a href="todo.html">Tasks</a></li>
+          <li><a href="analysis.html">Analysis</a></li>
+          <li><a href="brain.html">Brain Gym</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="download-app-col">
+        <h4>Download App</h4>
+        <div class="app-badges">
+          <div class="app-btn"><i class='bx bxl-play-store'></i> <span>Google Play</span></div>
+          <div class="app-btn"><i class='bx bxl-apple'></i> <span>App Store</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 AI Study Planner. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Central Study Data Service -->
+  <script src="studydata.js"></script>
+  <!-- JavaScript Logic -->
+  <script>
+    // 0. Profile Badge Info Loader
+    function updateProfileBadge() {
+      const storedUser = localStorage.getItem('studyPlannerUser');
+      const userName = (!storedUser || storedUser.trim() === "") ? "Student" : storedUser;
+
+      const nameBadge = document.getElementById('displayUserNameHeaderBadge');
+      if (nameBadge) nameBadge.innerText = userName;
+
+      const store = window.StudyData || window.SP;
+      if (store && store.stats) {
+        const stats = store.stats();
+        const levelBadge = document.getElementById('displayUserLevelHeaderBadge');
+        if (levelBadge) levelBadge.innerText = 'Level ' + stats.level + ' (' + stats.xp + ' XP)';
+      }
+    }
+
+    // 1. Live Real-Time Clock
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('liveClock').innerText = now.toLocaleTimeString();
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // 2. Timer Logic
+    let totalSeconds = 25 * 60;
+    let initialSeconds = 25 * 60;
+    let timerInterval = null;
+    let isRunning = false;
+    let sessionSubject = 'Focus Pomodoro';
+
+    const timeDisplay = document.getElementById('timeDisplay');
+    const startBtn = document.getElementById('startBtn');
+    const timerLabel = document.getElementById('timerLabel');
+    const rewardMsg = document.getElementById('pomoRewardMsg');
+
+    function updateDisplay() {
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      timeDisplay.innerText = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    function toggleTimer() {
+      if (isRunning) {
+        clearInterval(timerInterval);
+        startBtn.innerText = "Resume Session";
+        isRunning = false;
+      } else {
+        isRunning = true;
+        startBtn.innerText = "Pause Session";
+        rewardMsg.style.display = 'none';
+        timerInterval = setInterval(() => {
+          if (totalSeconds > 0) {
+            totalSeconds--;
+            updateDisplay();
+          } else {
+            clearInterval(timerInterval);
+            isRunning = false;
+            const completedMins = Math.round(initialSeconds / 60);
+            
+            // Record session if it was a study session (not a short break)
+            if (completedMins >= 10 && window.StudyData) {
+              window.StudyData.recordSession(completedMins, sessionSubject);
+              rewardMsg.innerText = `🎉 Awesome! Completed ${completedMins} minutes of focus! Recorded to your study consistency streak & awarded XP!`;
+              rewardMsg.style.display = 'block';
+            }
+
+            alert("⏰ Time's up! Focus session complete! Fantastic consistency!");
+            resetTimer();
+          }
+        }, 1000);
+      }
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      isRunning = false;
+      totalSeconds = initialSeconds;
+      startBtn.innerText = "Start Session";
+      updateDisplay();
+    }
+
+    // Preset Button Selector
+    function setPresetTimer(minutes, btn) {
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      
+      initialSeconds = minutes * 60;
+      totalSeconds = initialSeconds;
+      timerLabel.innerText = minutes <= 15 ? "Rest Break" : "Focus Session";
+      sessionSubject = minutes <= 15 ? "Rest Break" : "Focus Pomodoro";
+      resetTimer();
+    }
+
+    // Custom User Time Apply Function
+    function applyCustomTime() {
+      const inputVal = parseInt(document.getElementById('customMinutesInput').value);
+      if (isNaN(inputVal) || inputVal <= 0) {
+        alert("Please enter valid minutes (e.g. 10, 30, 50, etc.)");
+        return;
+      }
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+
+      initialSeconds = inputVal * 60;
+      totalSeconds = initialSeconds;
+      timerLabel.innerText = `Custom (${inputVal} min)`;
+      sessionSubject = `Custom Focus (${inputVal} min)`;
+      resetTimer();
+    }
+
+    window.onload = () => {
+      updateProfileBadge();
+    };
+  </script>
+</body>
+</html>

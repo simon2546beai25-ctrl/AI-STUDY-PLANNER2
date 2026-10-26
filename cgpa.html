@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CGPA Calculator - AI Study Planner</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <style>
+    .delete-btn {
+      background: #ffe3e3;
+      color: #e03131;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .delete-btn:hover { background: #ffc9c9; }
+    .select-grade, .input-credit {
+      padding: 6px 10px;
+      border: 1px solid #d5c8be;
+      border-radius: 6px;
+      background: #fff;
+    }
+
+    /* Lock Overlay Styles */
+    .calculator-wrapper {
+      position: relative;
+    }
+    .lock-overlay {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(253, 251, 248, 0.88);
+      backdrop-filter: blur(5px);
+      border-radius: 12px;
+      z-index: 50;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+    .lock-card {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      border: 1.5px solid #f0ede8;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+      max-width: 440px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="top-nav">
+    <a href="index.html" class="logo">
+      <i class='bx bx-brain'></i>
+      <span>AI Study Planner</span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="timetable.html">Timetable</a>
+      <a href="todo.html">Tasks</a>
+      <a href="cgpa.html" class="active">CGPA</a>
+    </nav>
+    <div class="nav-auth">
+      <!-- Profile Badge Only -->
+      <div class="user-profile-badge" style="display: flex; align-items: center; gap: 8px;">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" alt="Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
+        <div class="user-info">
+          <strong id="displayUserNameHeaderBadge" style="display: block; font-size: 0.85rem; color: #1e293b;">Student</strong>
+          <span id="displayUserLevelHeaderBadge" style="font-size: 0.75rem; color: #64748b;">Level 1 Scholar</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="dashboard-wrapper">
+    <aside class="sidebar">
+      <div class="user-brand">
+        <i class='bx bxs-graduation'></i>
+        <div>
+          <h4>Student Success Hub</h4>
+          <p>Your Journey, Our Support</p>
+        </div>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="dashboard.html"><i class='bx bx-grid-alt'></i> Dashboard</a></li>
+        <li><a href="timetable.html"><i class='bx bx-calendar'></i> Timetable</a></li>
+        <li><a href="todo.html"><i class='bx bx-list-check'></i> To-Do List</a></li>
+        <li class="active"><a href="cgpa.html"><i class='bx bx-calculator'></i> CGPA Calculator</a></li>
+        <li><a href="pomodoro.html"><i class='bx bx-timer'></i> Pomodoro Timer</a></li>
+        <li><a href="exams.html"><i class='bx bx-alarm-exclamation'></i> Exam Countdown</a></li>
+        <li><a href="notes.html"><i class='bx bx-note'></i> Quick Notes</a></li>
+        <li><a href="analysis.html"><i class='bx bx-line-chart'></i> Study Analysis</a></li>
+        <li><a href="brain.html"><i class='bx bx-brain'></i> Brain Gym</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="dashboard-header">
+        <div>
+          <h2>Interactive CGPA Calculator 🎓</h2>
+          <p>Change grades or add subjects to calculate your live CGPA.</p>
+        </div>
+        <div id="planBadge" style="padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; background: #e7f5ff; color: #1c7ed6;">
+          Plan: Checking
+        </div>
+      </div>
+
+      <!-- Main Calculator Card with Lock Wrap -->
+      <div class="calculator-wrapper">
+        
+        <!-- Lock Screen for Free Users -->
+        <div id="lockScreen" class="lock-overlay">
+          <div class="lock-card">
+            <div style="font-size: 3rem; color: #8c4a27; margin-bottom: 8px;"><i class='bx bxs-lock-alt'></i></div>
+            <h3 style="font-size: 1.4rem; color: #222;">Feature Locked!</h3>
+            <p style="color: #666; font-size: 0.9rem; margin: 10px 0 20px;">
+              CGPA Calculator <b>is not available on Free Plan </b> Upgrade to <b>Pro Plan</b> to unlock this feature.
+            </p>
+            <a href="pricing.html" class="btn-primary-hero" style="display: block; text-align: center; justify-content: center;">
+              Upgrade to Pro Plan (Unlock Now) &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- Calculator UI -->
+        <div class="card" id="calcCard">
+          <div class="cgpa-container">
+            <div class="cgpa-circle-large" id="cgpaBorder">
+              <h2 id="finalCgpa">0.00</h2>
+              <span>Calculated CGPA</span>
+              <small id="cgpaRemark" style="color: #0ca678; font-weight:600; margin-top:4px;">Keep Going! 🚀</small>
+            </div>
+            <div>
+              <h3>Live Semester Statistics</h3>
+              <p style="margin: 8px 0; color: #555;">Total Credits: <strong id="totalCredits">0</strong></p>
+              <p style="margin: 8px 0; color: #555;">Total Grade Points: <strong id="totalPoints">0</strong></p>
+              <p style="margin: 8px 0; color: #555;">Status: <strong id="academicStatus" style="color: #8c4a27;">Active Calculation</strong></p>
+            </div>
+          </div>
+
+          <table class="cgpa-stats-table" style="margin-top: 25px;">
+            <thead>
+              <tr>
+                <th>Course Name</th>
+                <th>Credits</th>
+                <th>Grade</th>
+                <th>Grade Points</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="subjectRows">
+              <tr>
+                <td><input type="text" value="Data Structures & Algorithms" class="select-grade" style="width: 100%;"></td>
+                <td><input type="number" value="4" min="1" max="10" class="input-credit credit-input" onchange="calculateCGPA()"></td>
+                <td>
+                  <select class="select-grade grade-input" onchange="calculateCGPA()">
+                    <option value="10">O / A+ (10)</option>
+                    <option value="9" selected>A (9)</option>
+                    <option value="8">B+ (8)</option>
+                    <option value="7">B (7)</option>
+                    <option value="6">C (6)</option>
+                    <option value="0">F (0)</option>
+                  </select>
+                </td>
+                <td class="row-points">36</td>
+                <td><button class="delete-btn" onclick="removeRow(this)"><i class='bx bx-trash'></i></button></td>
+              </tr>
+              <tr>
+                <td><input type="text" value="Database Management Systems" class="select-grade" style="width: 100%;"></td>
+                <td><input type="number" value="4" min="1" max="10" class="input-credit credit-input" onchange="calculateCGPA()"></td>
+                <td>
+                  <select class="select-grade grade-input" onchange="calculateCGPA()">
+                    <option value="10" selected>O / A+ (10)</option>
+                    <option value="9">A (9)</option>
+                    <option value="8">B+ (8)</option>
+                    <option value="7">B (7)</option>
+                    <option value="6">C (6)</option>
+                    <option value="0">F (0)</option>
+                  </select>
+                </td>
+                <td class="row-points">40</td>
+                <td><button class="delete-btn" onclick="removeRow(this)"><i class='bx bx-trash'></i></button></td>
+              </tr>
+              <tr>
+                <td><input type="text" value="Operating Systems" class="select-grade" style="width: 100%;"></td>
+                <td><input type="number" value="4" min="1" max="10" class="input-credit credit-input" onchange="calculateCGPA()"></td>
+                <td>
+                  <select class="select-grade grade-input" onchange="calculateCGPA()">
+                    <option value="10">O / A+ (10)</option>
+                    <option value="9">A (9)</option>
+                    <option value="8" selected>B+ (8)</option>
+                    <option value="7">B (7)</option>
+                    <option value="6">C (6)</option>
+                    <option value="0">F (0)</option>
+                  </select>
+                </td>
+                <td class="row-points">32</td>
+                <td><button class="delete-btn" onclick="removeRow(this)"><i class='bx bx-trash'></i></button></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <button class="btn-add-task" onclick="addNewSubject()" style="margin-top: 15px;">+ Add New Subject</button>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Central Study Data Service -->
+  <script src="studydata.js"></script>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <i class='bx bx-brain'></i>
+          <span>AI Study Planner</span>
+        </div>
+        <p>Your AI-powered companion to plan smarter, study better and achieve academic excellence.</p>
+        <div class="social-links">
+          <a href="#"><i class='bx bxl-instagram'></i></a>
+          <a href="#"><i class='bx bxl-twitter'></i></a>
+          <a href="#"><i class='bx bxl-linkedin'></i></a>
+          <a href="#"><i class='bx bxl-youtube'></i></a>
+        </div>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="features.html">Features</a></li>
+          <li><a href="pricing.html">Plans</a></li>
+          <li><a href="how-it-works.html">How It Works</a></li>
+          <li><a href="about.html">About Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Study Tips</a></li>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="download-app-col">
+        <h4>Download App</h4>
+        <div class="app-badges">
+          <div class="app-btn"><i class='bx bxl-play-store'></i> <span>Google Play</span></div>
+          <div class="app-btn"><i class='bx bxl-apple'></i> <span>App Store</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 AI Study Planner. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // 0. Profile Badge Info Loader
+    function updateProfileBadge() {
+      const storedUser = localStorage.getItem('studyPlannerUser');
+      const userName = (!storedUser || storedUser.trim() === "") ? "Student" : storedUser;
+
+      const nameBadge = document.getElementById('displayUserNameHeaderBadge');
+      if (nameBadge) nameBadge.innerText = userName;
+
+      const store = window.StudyData || window.SP;
+      if (store && store.stats) {
+        const stats = store.stats();
+        const levelBadge = document.getElementById('displayUserLevelHeaderBadge');
+        if (levelBadge) levelBadge.innerText = 'Level ' + stats.level + ' (' + stats.xp + ' XP)';
+      }
+    }
+
+    // 1. Check Plan Status (Lock / Unlock Logic)
+    function checkPlanStatus() {
+      const userPlan = localStorage.getItem('userPlanStatus') || 'free';
+      const lockScreen = document.getElementById('lockScreen');
+      const planBadge = document.getElementById('planBadge');
+
+      if (userPlan === 'pro') {
+        lockScreen.style.display = 'none';
+        planBadge.innerText = 'PRO MEMBER 👑';
+        planBadge.style.background = '#f0fdf4';
+        planBadge.style.color = '#166534';
+      } else {
+        lockScreen.style.display = 'flex';
+        planBadge.innerText = 'FREE PLAN 🚀';
+        planBadge.style.background = '#ffe3e3';
+        planBadge.style.color = '#e03131';
+      }
+    }
+
+    // 2. Calculation Logic
+    function calculateCGPA() {
+      const rows = document.querySelectorAll('#subjectRows tr');
+      let totalCredits = 0;
+      let totalWeightedPoints = 0;
+
+      rows.forEach(row => {
+        const credit = parseFloat(row.querySelector('.credit-input').value) || 0;
+        const grade = parseFloat(row.querySelector('.grade-input').value) || 0;
+        const subjectPoints = credit * grade;
+
+        row.querySelector('.row-points').innerText = subjectPoints;
+        totalCredits += credit;
+        totalWeightedPoints += subjectPoints;
+      });
+
+      const cgpa = totalCredits > 0 ? (totalWeightedPoints / totalCredits).toFixed(2) : "0.00";
+
+      document.getElementById('finalCgpa').innerText = cgpa;
+      document.getElementById('totalCredits').innerText = totalCredits;
+      document.getElementById('totalPoints').innerText = totalWeightedPoints;
+    }
+
+    function addNewSubject() {
+      const tbody = document.getElementById('subjectRows');
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+        <td><input type="text" placeholder="Subject Name" class="select-grade" style="width: 100%;"></td>
+        <td><input type="number" value="3" min="1" max="10" class="input-credit credit-input" onchange="calculateCGPA()"></td>
+        <td>
+          <select class="select-grade grade-input" onchange="calculateCGPA()">
+            <option value="10">O / A+ (10)</option>
+            <option value="9" selected>A (9)</option>
+            <option value="8">B+ (8)</option>
+            <option value="7">B (7)</option>
+            <option value="6">C (6)</option>
+            <option value="0">F (0)</option>
+          </select>
+        </td>
+        <td class="row-points">27</td>
+        <td><button class="delete-btn" onclick="removeRow(this)"><i class='bx bx-trash'></i></button></td>
+      `;
+      tbody.appendChild(newRow);
+      calculateCGPA();
+    }
+
+    function removeRow(btn) {
+      const row = btn.closest('tr');
+      row.remove();
+      calculateCGPA();
+    }
+
+    window.onload = () => {
+      updateProfileBadge();
+      checkPlanStatus();
+      calculateCGPA();
+    };
+  </script>
+</body>
+</html>

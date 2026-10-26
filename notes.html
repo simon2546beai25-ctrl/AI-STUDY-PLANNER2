@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Notes - AI Study Planner</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Font & Boxicons CDN -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  
+  <style>
+    /* Lock Screen Overlay */
+    .notes-wrapper {
+      position: relative;
+    }
+    .lock-overlay {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(253, 251, 248, 0.88);
+      backdrop-filter: blur(5px);
+      border-radius: 12px;
+      z-index: 50;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+    .lock-card {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      border: 1.5px solid #f0ede8;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+      max-width: 440px;
+    }
+    
+    /* Add Note Form */
+    .add-note-box {
+      background: #faf8f5;
+      border: 1px dashed #d5c8be;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+    .note-input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #d5c8be;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+      background: #fff;
+    }
+    .note-textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #d5c8be;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+      background: #fff;
+      resize: vertical;
+      min-height: 80px;
+    }
+    .note-card-item {
+      background: #ffffff;
+      border: 1px solid #f0ede8;
+      border-radius: 10px;
+      padding: 16px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .note-delete-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #ffe3e3;
+      color: #e03131;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .note-delete-btn:hover { background: #ffc9c9; }
+  </style>
+</head>
+<body>
+
+  <header class="top-nav">
+    <a href="index.html" class="logo">
+      <i class='bx bx-brain'></i>
+      <span>AI Study Planner</span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="timetable.html">Timetable</a>
+      <a href="todo.html">Tasks</a>
+      <a href="notes.html" class="active">Notes</a>
+    </nav>
+    <div class="nav-auth">
+      <!-- Profile Badge Only -->
+      <div class="user-profile-badge" style="display: flex; align-items: center; gap: 8px;">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" alt="Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
+        <div class="user-info">
+          <strong id="displayUserNameHeaderBadge" style="display: block; font-size: 0.85rem; color: #1e293b;">Student</strong>
+          <span id="displayUserLevelHeaderBadge" style="font-size: 0.75rem; color: #64748b;">Level 1 Scholar</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="dashboard-wrapper">
+    <aside class="sidebar">
+      <div class="user-brand">
+        <i class='bx bxs-graduation'></i>
+        <div>
+          <h4>Student Success Hub</h4>
+          <p>Your Journey, Our Support</p>
+        </div>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="dashboard.html"><i class='bx bx-grid-alt'></i> Dashboard</a></li>
+        <li><a href="timetable.html"><i class='bx bx-calendar'></i> Timetable</a></li>
+        <li><a href="todo.html"><i class='bx bx-list-check'></i> To-Do List</a></li>
+        <li><a href="cgpa.html"><i class='bx bx-calculator'></i> CGPA Calculator</a></li>
+        <li><a href="pomodoro.html"><i class='bx bx-timer'></i> Pomodoro Timer</a></li>
+        <li><a href="exams.html"><i class='bx bx-alarm-exclamation'></i> Exam Countdown</a></li>
+        <li class="active"><a href="notes.html"><i class='bx bx-note'></i> Quick Notes</a></li>
+        <li><a href="analysis.html"><i class='bx bx-line-chart'></i> Study Analysis</a></li>
+        <li><a href="brain.html"><i class='bx bx-brain'></i> Brain Gym</a></li>
+      </ul>
+      <div class="sidebar-quote">
+        <p>"Short notes today mean higher scores tomorrow."</p>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="dashboard-header">
+        <div>
+          <h2>Smart AI & Quick Notes 📝</h2>
+          <p>Create and organize chapter summary sheets for quick revision.</p>
+        </div>
+        <div id="planBadge" style="padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; background: #e7f5ff; color: #1c7ed6;">
+          Plan: Checking
+        </div>
+      </div>
+
+      <!-- Notes Wrapper with Lock Screen Support -->
+      <div class="notes-wrapper">
+        
+        <!-- Lock Screen for Free Users -->
+        <div id="lockScreen" class="lock-overlay">
+          <div class="lock-card">
+            <div style="font-size: 3rem; color: #8c4a27; margin-bottom: 8px;"><i class='bx bxs-lock-alt'></i></div>
+            <h3 style="font-size: 1.4rem; color: #222;">Smart Notes Locked!</h3>
+            <p style="color: #666; font-size: 0.9rem; margin: 10px 0 20px;">
+              Smart AI Notes feature is not available for <b>Free Plan</b> users. For unlimited notes and chapter summaries, please upgrade to the <b>Pro Plan</b>.
+            </p>
+            <a href="pricing.html" class="btn-primary-hero" style="display: block; text-align: center; justify-content: center;">
+              Upgrade to Pro Plan (Unlock Now) &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- Notes UI Component -->
+        <div class="card" id="notesContent">
+          <!-- Add Note Form -->
+          <form class="add-note-box" onsubmit="handleAddNote(event)">
+            <h4 style="margin-bottom: 10px; font-size: 0.95rem; color: #444;">+ Add New Revision Note</h4>
+            <input type="text" id="noteTitleInput" placeholder="Note Title (e.g. DBMS Normalization Rules, Java Multithreading)" class="note-input" required>
+            <textarea id="noteBodyInput" placeholder="Key points, important formulas, and quick summaries..." class="note-textarea" required></textarea>
+            <button type="submit" class="btn-primary-hero" style="padding: 8px 18px; font-size: 0.85rem; border: none; cursor: pointer;">Save Note</button>
+          </form>
+
+          <!-- Dynamic Notes Grid -->
+          <div class="notes-grid" id="notesContainer">
+            <!-- Notes load here dynamically -->
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Central Study Data Service -->
+  <script src="studydata.js"></script>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <i class='bx bx-brain'></i>
+          <span>AI Study Planner</span>
+        </div>
+        <p>Your AI-powered companion to plan smarter, study better and achieve academic excellence.</p>
+        <div class="social-links">
+          <a href="#"><i class='bx bxl-instagram'></i></a>
+          <a href="#"><i class='bx bxl-twitter'></i></a>
+          <a href="#"><i class='bx bxl-linkedin'></i></a>
+          <a href="#"><i class='bx bxl-youtube'></i></a>
+        </div>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="features.html">Features</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="how-it-works.html">How It Works</a></li>
+          <li><a href="about.html">About Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Study Tips</a></li>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="download-app-col">
+        <h4>Download App</h4>
+        <div class="app-badges">
+          <div class="app-btn"><i class='bx bxl-play-store'></i> <span>Google Play</span></div>
+          <div class="app-btn"><i class='bx bxl-apple'></i> <span>App Store</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 AI Study Planner. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // 0. Update User Profile Info from LocalStorage and StudyData
+    function updateProfileBadge() {
+      const storedUser = localStorage.getItem('studyPlannerUser');
+      const userName = (!storedUser || storedUser.trim() === "") ? "Student" : storedUser;
+
+      const nameBadge = document.getElementById('displayUserNameHeaderBadge');
+      if (nameBadge) nameBadge.innerText = userName;
+
+      const store = window.StudyData || window.SP;
+      if (store && store.stats) {
+        const stats = store.stats();
+        const levelBadge = document.getElementById('displayUserLevelHeaderBadge');
+        if (levelBadge) levelBadge.innerText = 'Level ' + stats.level + ' (' + stats.xp + ' XP)';
+      }
+    }
+
+    // 1. Check Plan Status
+    function checkPlanStatus() {
+      const userPlan = localStorage.getItem('userPlanStatus') || 'free';
+      const lockScreen = document.getElementById('lockScreen');
+      const planBadge = document.getElementById('planBadge');
+
+      if (userPlan === 'pro') {
+        lockScreen.style.display = 'none';
+        planBadge.innerText = 'PRO MEMBER 👑';
+        planBadge.style.background = '#f0fdf4';
+        planBadge.style.color = '#166534';
+      } else {
+        lockScreen.style.display = 'flex';
+        planBadge.innerText = 'FREE PLAN 🚀';
+        planBadge.style.background = '#ffe3e3';
+        planBadge.style.color = '#e03131';
+      }
+    }
+
+    // 2. Dynamic Notes Handling
+    const defaultNotes = [
+      { id: 1, title: "Java OOP Concepts", body: "Inheritance, Polymorphism, Encapsulation, Abstraction, and Interfaces summary.", time: "Updated recently" },
+      { id: 2, title: "DBMS Normalization Cheat Sheet", body: "1NF (Atomic), 2NF (No partial dependency), 3NF (No transitive dependency), BCNF.", time: "Updated 1 day ago" },
+      { id: 3, title: "Operating Systems CPU Scheduling", body: "FCFS, SJF (Shortest Job First), Round Robin with Time Quantum, Priority Scheduling.", time: "Updated 2 days ago" }
+    ];
+
+    function getSavedNotes() {
+      const saved = localStorage.getItem('studyPlannerNotes');
+      return saved ? JSON.parse(saved) : defaultNotes;
+    }
+
+    function renderNotes() {
+      const notes = getSavedNotes();
+      const container = document.getElementById('notesContainer');
+      container.innerHTML = "";
+
+      notes.forEach(note => {
+        const div = document.createElement('div');
+        div.className = "note-card-item note-box";
+        div.innerHTML = `
+          <button class="note-delete-btn" onclick="deleteNote(${note.id})" title="Delete Note"><i class='bx bx-trash'></i></button>
+          <h4>${note.title}</h4>
+          <p style="margin: 8px 0 12px; color: #555; font-size: 0.85rem; line-height: 1.5;">${note.body}</p>
+          <small style="color: #888; font-size: 0.75rem;">${note.time}</small>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function handleAddNote(e) {
+      e.preventDefault();
+      const title = document.getElementById('noteTitleInput').value.trim();
+      const body = document.getElementById('noteBodyInput').value.trim();
+
+      if (!title || !body) return;
+
+      const notes = getSavedNotes();
+      const newNote = {
+        id: Date.now(),
+        title: title,
+        body: body,
+        time: "Just now"
+      };
+
+      notes.unshift(newNote);
+      localStorage.setItem('studyPlannerNotes', JSON.stringify(notes));
+      renderNotes();
+
+      document.getElementById('noteTitleInput').value = "";
+      document.getElementById('noteBodyInput').value = "";
+    }
+
+    function deleteNote(id) {
+      let notes = getSavedNotes();
+      notes = notes.filter(n => n.id !== id);
+      localStorage.setItem('studyPlannerNotes', JSON.stringify(notes));
+      renderNotes();
+    }
+
+    window.onload = () => {
+      updateProfileBadge();
+      checkPlanStatus();
+      renderNotes();
+    };
+  </script>
+</body>
+</html>

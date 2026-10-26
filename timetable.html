@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timetable & Smart Schedule - AI Study Planner</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <style>
+    /* Day Tabs Styling */
+    .day-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .day-tab {
+      background: #f0ede8;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      color: #555;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .day-tab.active {
+      background: #151517;
+      color: #fff;
+    }
+    .day-tab:hover:not(.active) {
+      background: #e0dacf;
+    }
+
+    /* Tab Content (Hide/Show) */
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* University Timetable Layout */
+    .uni-timetable li {
+      display: grid;
+      grid-template-columns: 1.5fr 2fr 1fr;
+      align-items: center;
+      padding: 14px 10px;
+      border-bottom: 1px solid #eee;
+      margin: 0;
+    }
+    .uni-timetable li:last-child { border-bottom: none; }
+    .uni-time { text-align: left; font-weight: 600; color: #555; font-size: 0.95rem; }
+    .uni-subject { text-align: center; font-weight: 700; color: #222; font-size: 1rem; }
+    .uni-status { text-align: right; }
+
+    /* 2-Column Layout */
+    .split-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      align-items: stretch;
+      margin-top: 30px;
+    }
+
+    /* Dark Card Theme for Chart and List */
+    .dark-card {
+      background: #151517;
+      color: #fff;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    /* Donut Chart */
+    .donut-chart-container {
+      position: relative;
+      width: 280px;
+      height: 280px;
+      margin: 40px auto;
+      border-radius: 50%;
+      background: conic-gradient(
+        from -30deg,
+        #f7e682 0deg 60deg,    /* SE */
+        #f08b33 60deg 120deg,  /* AI */
+        #e94b59 120deg 240deg, /* DBMS */
+        #319ced 240deg 300deg, /* OS */
+        #2bba68 300deg 360deg  /* CN */
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 0 4px #151517;
+    }
+    .donut-inner {
+      width: 130px;
+      height: 130px;
+      background: #1c1c1e;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 500;
+      text-align: center;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+    }
+    .chart-label {
+      position: absolute;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-align: center;
+      color: #fff;
+      text-shadow: 0px 1px 3px rgba(0,0,0,0.6);
+    }
+
+    /* Right Side: Subject List */
+    .subject-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      font-size: 1rem;
+    }
+    .subject-row:last-child { margin-bottom: 0; }
+    .color-box {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 14px;
+    }
+    .color-box i { font-size: 1.1rem; color: #151517; font-weight: bold; }
+    
+    .bg-dbms { background-color: #e94b59; }
+    .bg-os { background-color: #319ced; }
+    .bg-cn { background-color: #2bba68; }
+    .bg-se { background-color: #f7e682; }
+    .bg-ai { background-color: #f08b33; }
+    
+    .subject-time-percent { text-align: right; line-height: 1.4; }
+    .subject-time-percent strong { font-weight: 600; font-size: 0.95rem; }
+    .subject-time-percent small { color: #888; font-size: 0.8rem; display: block; }
+
+    /* Generator Box */
+    .generator-box {
+      background: #ffffff;
+      border: 1px solid #f0ede8;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+    }
+    .input-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .simple-input {
+      padding: 10px 12px;
+      border: 1px solid #d5c8be;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    .simple-input:focus { border-color: #8c4a27; }
+    .btn-generate {
+      background: #8c4a27;
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: 0.2s;
+      white-space: nowrap;
+    }
+    .btn-generate:hover { background: #6e391d; }
+    
+    .btn-clear {
+      background: transparent;
+      color: #e03131;
+      border: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 0;
+    }
+    .btn-clear:hover { text-decoration: underline; }
+
+    .output-item {
+      display: flex;
+      align-items: center;
+      background: #faf8f5;
+      border: 1px solid #e0dacf;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-top: 10px;
+      gap: 15px;
+    }
+    .output-time {
+      font-weight: 700;
+      color: #8c4a27;
+      background: #fff;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid #e0dacf;
+      white-space: nowrap;
+    }
+    .output-subject {
+      font-weight: 600;
+      color: #222;
+      flex: 1;
+    }
+
+    @media(max-width: 900px) {
+      .split-layout { grid-template-columns: 1fr; }
+      .input-group { flex-direction: column; align-items: stretch; }
+      .btn-generate { justify-content: center; }
+      .uni-timetable li { grid-template-columns: 1fr; gap: 8px; text-align: center; }
+      .uni-time, .uni-status { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="top-nav">
+    <a href="index.html" class="logo">
+      <i class='bx bx-brain'></i>
+      <span>AI Study Planner</span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="timetable.html" class="active">Timetable</a>
+      <a href="todo.html">Tasks</a>
+      <a href="analysis.html">Analysis</a>
+      <a href="brain.html">Brain Gym</a>
+    </nav>
+    <div class="nav-auth">
+      <a href="index.html" class="btn-login">Back to Home</a>
+    </div>
+  </header>
+
+  <div class="dashboard-wrapper">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="user-brand">
+        <i class='bx bxs-graduation'></i>
+        <div>
+          <h4>Student Success Hub</h4>
+          <p>Your Journey, Our Support</p>
+        </div>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="dashboard.html"><i class='bx bx-grid-alt'></i> Dashboard</a></li>
+        <li class="active"><a href="timetable.html"><i class='bx bx-calendar'></i> Timetable</a></li>
+        <li><a href="todo.html"><i class='bx bx-list-check'></i> To-Do List</a></li>
+        <li><a href="cgpa.html"><i class='bx bx-calculator'></i> CGPA Calculator</a></li>
+        <li><a href="pomodoro.html"><i class='bx bx-timer'></i> Pomodoro Timer</a></li>
+        <li><a href="exams.html"><i class='bx bx-alarm-exclamation'></i> Exam Countdown</a></li>
+        <li><a href="notes.html"><i class='bx bx-note'></i> Quick Notes</a></li>
+        <li><a href="analysis.html"><i class='bx bx-line-chart'></i> Study Analysis</a></li>
+        <li><a href="brain.html"><i class='bx bx-brain'></i> Brain Gym</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="dashboard-header">
+        <div>
+          <h2>Smart Timetable 📅</h2>
+          <p>Your university classes, study distribution, and custom schedule generator.</p>
+        </div>
+      </div>
+
+      <!-- University Timetable with Day Tabs -->
+      <div class="card" style="background:#fff; border-radius:12px; padding:25px; box-shadow:0 5px 15px rgba(0,0,0,0.03);">
+        <div style="text-align:center; margin-bottom:15px;">
+          <h4 style="margin:0; font-size:1.1rem; color:#333;"><i class='bx bx-calendar-week'></i> Weekly Routine</h4>
+        </div>
+
+        <!-- Day Tabs -->
+        <div class="day-tabs">
+          <button class="day-tab" onclick="showDay('monday', this)">Monday</button>
+          <button class="day-tab" onclick="showDay('tuesday', this)">Tuesday</button>
+          <button class="day-tab" onclick="showDay('wednesday', this)">Wednesday</button>
+          <button class="day-tab" onclick="showDay('thursday', this)">Thursday</button>
+          <button class="day-tab" onclick="showDay('friday', this)">Friday</button>
+        </div>
+
+        <!-- Monday Schedule -->
+        <ul id="monday" class="list-items uni-timetable tab-content" style="list-style:none; padding:0; margin:0;">
+          <li>
+            <div class="uni-time">09:00 AM - 10:00 AM</div>
+            <div class="uni-subject">Software Engineering</div>
+            <div class="uni-status"></div>
+          </li>
+          <li>
+            <div class="uni-time">10:15 AM - 11:15 AM</div>
+            <div class="uni-subject">Database Management Systems</div>
+            <div class="uni-status"></div>
+          </li>
+          <li>
+            <div class="uni-time">11:30 AM - 01:30 PM</div>
+            <div class="uni-subject">DBMS Lab</div>
+            <div class="uni-status"></div>
+          </li>
+        </ul>
+
+        <!-- Tuesday Schedule -->
+        <ul id="tuesday" class="list-items uni-timetable tab-content" style="list-style:none; padding:0; margin:0;">
+          <li>
+            <div class="uni-time">09:00 AM - 10:00 AM</div>
+            <div class="uni-subject">Artificial Intelligence</div>
+            <div class="uni-status"></div>
+          </li>
+          <li>
+            <div class="uni-time">10:15 AM - 11:15 AM</div>
+            <div class="uni-subject">Operating Systems</div>
+            <div class="uni-status"></div>
+          </li>
+          <li>
+            <div class="uni-time">01:30 PM - 02:30 PM</div>
+            <div class="uni-subject">Computer Networks</div>
+            <div class="uni-status"></div>
+          </li>
+        </ul>
+
+        <!-- Wednesday Schedule -->
+        <ul id="wednesday" class="list-items uni-timetable tab-content" style="list-style:none; padding:0; margin:0;">
+          <li>
+            <div class="uni-time">09:00 AM - 11:00 AM</div>
+            <div class="uni-subject">OS & Linux Lab</div>
+            <div class="uni-status"></div>
+          </li>
+          <li>
+            <div class="uni-time">11:30 AM - 12:30 PM</div>
+            <div class="uni-subject">Database Management Systems</div>
+            <div class="uni-status"></div>
+          </li>
+        </ul>
+
+        <!-- Thursday Schedule -->
+        <ul id="thursday" class="list-items uni-timetable tab-content" style="list-style:none; padding:0; margin:0;">
+          <li>
+            <div class="uni-time">10:15 AM - 11:15 AM</div>
+            <div class="uni-subject">Software Engineering</div>
+            <div class="uni-status"></div>
+          </li>
+          <li>
+            <div class="uni-time">11:30 AM - 12:30 PM</div>
+            <div class="uni-subject">Computer Networks</div>
+            <div class="uni-status"></div>
+          </li>
+          <li>
+            <div class="uni-time">01:30 PM - 03:30 PM</div>
+            <div class="uni-subject">Computer Networks Lab</div>
+            <div class="uni-status"></div>
+          </li>
+        </ul>
+
+        <!-- Friday Schedule -->
+        <ul id="friday" class="list-items uni-timetable tab-content" style="list-style:none; padding:0; margin:0;">
+          <li>
+            <div class="uni-time">09:00 AM - 10:00 AM</div>
+            <div class="uni-subject">Artificial Intelligence</div>
+            <div class="uni-status"></div>
+          </li>
+          <li>
+            <div class="uni-time">10:15 AM - 12:15 PM</div>
+            <div class="uni-subject">AI Project Lab</div>
+            <div class="uni-status"></div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 2-Column Split Layout -->
+      <div class="split-layout">
+        
+        <!-- LEFT COLUMN -->
+        <div class="dark-card" style="display: flex; align-items: center; justify-content: center; flex-direction: column;">
+          <h3 style="margin-bottom: 20px; font-weight: 500;">Study Distribution</h3>
+          
+          <div class="donut-chart-container">
+            <div class="chart-label" style="top: 20px; color: #111;">16.67%<br>Soft. Engg</div>
+            <div class="chart-label" style="top: 80px; right: 15px;">16.67%<br>AI</div>
+            <div class="chart-label" style="bottom: 30px;">33.33%<br>DBMS</div>
+            <div class="chart-label" style="top: 170px; left: 15px;">16.67%<br>OS</div>
+            <div class="chart-label" style="top: 80px; left: 10px;">16.67%<br>Comp. Net.</div>
+            
+            <div class="donut-inner">
+              4 hr, 30 min
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div>
+          <div class="dark-card" style="padding: 25px 30px;">
+            <div class="subject-row">
+              <div style="display:flex; align-items:center;">
+                <span class="color-box bg-dbms"><i class='bx bx-check'></i></span> <span>DBMS</span>
+              </div>
+              <div class="subject-time-percent"><strong>1 hr, 30 min</strong><small>33.33%</small></div>
+            </div>
+            <div class="subject-row">
+              <div style="display:flex; align-items:center;">
+                <span class="color-box bg-os"><i class='bx bx-check'></i></span> <span>Operating Systems</span>
+              </div>
+              <div class="subject-time-percent"><strong>45 min</strong><small>16.67%</small></div>
+            </div>
+            <div class="subject-row">
+              <div style="display:flex; align-items:center;">
+                <span class="color-box bg-cn"><i class='bx bx-check'></i></span> <span>Computer Networks</span>
+              </div>
+              <div class="subject-time-percent"><strong>45 min</strong><small>16.67%</small></div>
+            </div>
+            <div class="subject-row">
+              <div style="display:flex; align-items:center;">
+                <span class="color-box bg-se" style="color:#000;"><i class='bx bx-check'></i></span> <span>Software Engg.</span>
+              </div>
+              <div class="subject-time-percent"><strong>45 min</strong><small>16.67%</small></div>
+            </div>
+            <div class="subject-row">
+              <div style="display:flex; align-items:center;">
+                <span class="color-box bg-ai"><i class='bx bx-check'></i></span> <span>Artificial Intelligence</span>
+              </div>
+              <div class="subject-time-percent"><strong>45 min</strong><small>16.67%</small></div>
+            </div>
+          </div>
+
+          <div class="generator-box">
+            <h4 style="margin-bottom: 12px; color: #333;"><i class='bx bx-bulb'></i> Smart Timetable Generator</h4>
+            <div class="input-group">
+              <input type="time" id="newStartTime" class="simple-input" required title="Start Time">
+              <span style="color:#888;">to</span>
+              <input type="time" id="newEndTime" class="simple-input" required title="End Time">
+              <input type="text" id="newSubject" class="simple-input" placeholder="Subject name..." style="flex: 1; min-width: 130px;">
+              <button type="button" class="btn-generate" onclick="addSchedule()">
+                <i class='bx bx-plus'></i> Generate Timetable
+              </button>
+            </div>
+            <div id="scheduleOutput"></div>
+          </div>
+
+          <button class="btn-clear" onclick="clearSchedule()">
+            <i class='bx bx-trash'></i> Clear Timetable
+          </button>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Footer Added Below -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <i class='bx bx-brain'></i>
+          <span>AI Study Planner</span>
+        </div>
+        <p>Your AI-powered companion to plan smarter, study better and achieve academic excellence.</p>
+        <div class="social-links">
+          <a href="#"><i class='bx bxl-instagram'></i></a>
+          <a href="#"><i class='bx bxl-twitter'></i></a>
+          <a href="#"><i class='bx bxl-linkedin'></i></a>
+          <a href="#"><i class='bx bxl-youtube'></i></a>
+        </div>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="features.html">Features</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="how-it-works.html">How It Works</a></li>
+          <li><a href="about.html">About Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Study Tools</h4>
+        <ul>
+          <li><a href="timetable.html">Smart Timetable</a></li>
+          <li><a href="todo.html">Deadline Manager</a></li>
+          <li><a href="analysis.html">Study Analysis</a></li>
+          <li><a href="brain.html">Brain Gym</a></li>
+          <li><a href="pomodoro.html">Focus Timer</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <ul>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="download-app-col">
+        <h4>Download App</h4>
+        <div class="app-badges">
+          <div class="app-btn"><i class='bx bxl-play-store'></i> <span>Google Play</span></div>
+          <div class="app-btn"><i class='bx bxl-apple'></i> <span>App Store</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 AI Study Planner. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Day Tab Switch Logic
+    function showDay(dayId, btnElement) {
+      document.querySelectorAll('.day-tab').forEach(tab => tab.classList.remove('active'));
+      btnElement.classList.add('active');
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      document.getElementById(dayId).classList.add('active');
+    }
+
+    // Dynamic Status Logic based on Current Day & Time
+    function updateTimetableStatuses() {
+      const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+      const now = new Date();
+      const currentDayIndex = now.getDay(); 
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+      // Open Today's Tab by Default (if weekend, open Monday)
+      let targetDay = currentDayIndex === 0 || currentDayIndex === 6 ? 'monday' : days[currentDayIndex];
+      const activeBtn = document.querySelector(`.day-tab[onclick*="${targetDay}"]`);
+      if(activeBtn) showDay(targetDay, activeBtn);
+
+      // Helper function to convert "09:00 AM" to minutes for comparison
+      function parseTime(timeStr) {
+        const [time, modifier] = timeStr.trim().split(' ');
+        let [hours, minutes] = time.split(':');
+        hours = parseInt(hours, 10);
+        minutes = parseInt(minutes, 10);
+        if (hours === 12) { hours = modifier === 'AM' ? 0 : 12; } 
+        else if (modifier === 'PM') { hours += 12; }
+        return hours * 60 + minutes;
+      }
+
+      // Loop through each Day Schedule
+      document.querySelectorAll('.uni-timetable').forEach(ul => {
+        const ulDayIndex = days.indexOf(ul.id);
+        
+        ul.querySelectorAll('li').forEach(li => {
+          const timeText = li.querySelector('.uni-time').innerText;
+          const statusDiv = li.querySelector('.uni-status');
+          
+          const [startStr, endStr] = timeText.split(' - ');
+          const startMins = parseTime(startStr);
+          const endMins = parseTime(endStr);
+          
+          let statusText, styleStr;
+
+          if (ulDayIndex < currentDayIndex) {
+            statusText = 'Completed';
+            styleStr = 'background:#f3f4f6; color:#374151;';
+          } else if (ulDayIndex > currentDayIndex) {
+            statusText = 'Upcoming';
+            styleStr = 'background:#e1effe; color:#1e40af;';
+          } else {
+            // Same Day Check
+            if (currentMinutes < startMins) {
+              statusText = 'Upcoming';
+              styleStr = 'background:#e1effe; color:#1e40af;';
+            } else if (currentMinutes >= startMins && currentMinutes <= endMins) {
+              statusText = 'Ongoing';
+              styleStr = 'background:#e8e1f5; color:#6b46c1;';
+            } else {
+              statusText = 'Completed';
+              styleStr = 'background:#f3f4f6; color:#374151;';
+            }
+          }
+
+          statusDiv.innerHTML = `<span style="${styleStr} padding:4px 10px; border-radius:4px; font-size:0.8rem; font-weight:600;">${statusText}</span>`;
+        });
+      });
+    }
+
+    // Smart Timetable Generator Logic
+    function loadSchedule() {
+      const output = document.getElementById('scheduleOutput');
+      const saved = JSON.parse(localStorage.getItem('simpleSchedule') || '[]');
+      
+      if(saved.length === 0) {
+        output.innerHTML = '';
+        return;
+      }
+
+      let html = '';
+      saved.forEach((item, index) => {
+        html += `
+          <div class="output-item">
+            <div class="output-time">${item.start} - ${item.end}</div>
+            <div class="output-subject">${item.subject}</div>
+            <button onclick="removeSchedule(${index})" style="background:none; border:none; color:#e03131; cursor:pointer;"><i class='bx bx-x'></i></button>
+          </div>
+        `;
+      });
+      output.innerHTML = html;
+    }
+
+    function addSchedule() {
+      const startStr = document.getElementById('newStartTime').value;
+      const endStr = document.getElementById('newEndTime').value;
+      const subjStr = document.getElementById('newSubject').value.trim();
+
+      if(!startStr || !endStr || !subjStr) {
+        alert("Please enter Start Time, End Time, and Subject.");
+        return;
+      }
+
+      const saved = JSON.parse(localStorage.getItem('simpleSchedule') || '[]');
+      saved.push({ start: startStr, end: endStr, subject: subjStr });
+      saved.sort((a, b) => a.start.localeCompare(b.start));
+      localStorage.setItem('simpleSchedule', JSON.stringify(saved));
+      
+      document.getElementById('newStartTime').value = '';
+      document.getElementById('newEndTime').value = '';
+      document.getElementById('newSubject').value = '';
+      
+      loadSchedule();
+    }
+
+    function removeSchedule(index) {
+      const saved = JSON.parse(localStorage.getItem('simpleSchedule') || '[]');
+      saved.splice(index, 1);
+      localStorage.setItem('simpleSchedule', JSON.stringify(saved));
+      loadSchedule();
+    }
+
+    function clearSchedule() {
+      if(confirm("Are you sure you want to clear your entire generated timetable?")) {
+        localStorage.removeItem('simpleSchedule');
+        loadSchedule();
+      }
+    }
+
+    // Initialize all functions when the window loads
+    window.onload = function() {
+      updateTimetableStatuses();
+      loadSchedule();
+    };
+  </script>
+</body>
+</html>
